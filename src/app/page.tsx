@@ -155,19 +155,27 @@ export default function HomePage() {
               Bekijk de 5 initiatieven
               <ArrowRight className="h-4 w-4" />
             </a>
-            <a
-              href="#aanleiding"
-              className="inline-flex items-center gap-2 rounded-lg border border-white/30 px-6 py-3 text-sm font-semibold text-white hover:bg-white/10 transition"
-            >
-              Waarom dit nodig is
-            </a>
             <Link
-              href="/community"
+              href="/dashboard"
               className="inline-flex items-center gap-2 rounded-lg border border-white/30 px-6 py-3 text-sm font-semibold text-white hover:bg-white/10 transition"
             >
-              <MessageSquare className="h-4 w-4" />
-              Community &amp; Forum
+              <BarChart3 className="h-4 w-4" />
+              Impact Dashboard
             </Link>
+            <Link
+              href="/quiz"
+              className="inline-flex items-center gap-2 rounded-lg border border-white/30 px-6 py-3 text-sm font-semibold text-white hover:bg-white/10 transition"
+            >
+              <Lightbulb className="h-4 w-4" />
+              Test je kennis
+            </Link>
+            <a
+              href="#doe-mee"
+              className="inline-flex items-center gap-2 rounded-lg bg-emerald-500 px-6 py-3 text-sm font-semibold text-white shadow-lg hover:bg-emerald-400 transition"
+            >
+              <Heart className="h-4 w-4" />
+              Doe mee!
+            </a>
           </div>
 
           {/* Quick stats */}
@@ -730,30 +738,126 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ============ COMMUNITY TEASER ============ */}
-      <section className="bg-primary-800 py-16 text-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <MessageSquare className="mx-auto h-10 w-10 text-primary-200" />
-          <h2 className="mt-4 text-2xl font-bold sm:text-3xl">Word onderdeel van de community</h2>
-          <p className="mt-3 mx-auto max-w-2xl text-primary-200 leading-relaxed">
-            Stel vragen aan collega-professionals, deel je ervaringen, en leer van initiatieven uit
-            andere regio&apos;s. Ons forum brengt zorgprofessionals, beleidsmakers en onderzoekers samen.
-          </p>
-          <div className="mt-8 flex justify-center gap-4 flex-wrap">
-            <Link
-              href="/community"
-              className="inline-flex items-center gap-2 rounded-lg bg-white px-6 py-3 text-sm font-semibold text-primary-800 hover:bg-primary-50 transition"
-            >
-              <MessageSquare className="h-4 w-4" />
-              Naar het forum
-              <ArrowRight className="h-4 w-4" />
+      {/* ============ DOE MEE CTA ============ */}
+      <section id="doe-mee" className="scroll-mt-20 relative overflow-hidden bg-gradient-to-br from-emerald-600 via-teal-600 to-primary-700 py-20 text-white">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute -left-16 top-1/4 h-80 w-80 rounded-full bg-white blur-3xl" />
+          <div className="absolute -right-20 -bottom-10 h-64 w-64 rounded-full bg-teal-300 blur-3xl" />
+        </div>
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
+            <div>
+              <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-1.5 text-sm font-semibold backdrop-blur-sm">
+                <Heart className="h-4 w-4 text-rose-300" />
+                Doe mee aan de beweging
+              </span>
+              <h2 className="mt-6 text-3xl font-bold leading-tight sm:text-4xl">
+                Enthousiast?<br />
+                Sluit je aan bij de kopgroep.
+              </h2>
+              <p className="mt-4 text-lg text-white/80 leading-relaxed max-w-xl">
+                Samen kunnen we de jeugdzorg in Zuid-Holland Zuid transformeren. Sluit je aan als
+                aanbieder, gemeente of professional en draag bij aan <strong className="text-white">passende zorg, lagere volumes
+                en betere uitkomsten</strong> voor jongeren en gezinnen.
+              </p>
+              <div className="mt-6 space-y-3 text-white/90">
+                <div className="flex items-start gap-3">
+                  <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-300" />
+                  <span>Toegang tot bewezen initiatieven en implementatie-ondersteuning</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-300" />
+                  <span>Spiegelinformatie en benchmark met andere aanbieders</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-300" />
+                  <span>Contractuele ruimte voor innovatie en kwaliteitsverbetering</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-300" />
+                  <span>Netwerk van gelijkgestemde professionals en organisaties</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 p-8">
+              <h3 className="text-xl font-bold">Meld je aan</h3>
+              <p className="mt-1 text-sm text-white/70">Vul je gegevens in en we nemen contact op</p>
+              <div className="mt-6 space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-white/80">Naam</label>
+                  <input type="text" placeholder="Je volledige naam" className="mt-1 w-full rounded-lg bg-white/10 border border-white/20 px-4 py-2.5 text-sm text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-white/30" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-white/80">E-mailadres</label>
+                  <input type="email" placeholder="naam@organisatie.nl" className="mt-1 w-full rounded-lg bg-white/10 border border-white/20 px-4 py-2.5 text-sm text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-white/30" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-white/80">Organisatie</label>
+                  <input type="text" placeholder="Naam van je organisatie" className="mt-1 w-full rounded-lg bg-white/10 border border-white/20 px-4 py-2.5 text-sm text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-white/30" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-white/80">Rol</label>
+                  <select className="mt-1 w-full rounded-lg bg-white/10 border border-white/20 px-4 py-2.5 text-sm text-white/70 focus:outline-none focus:ring-2 focus:ring-white/30">
+                    <option value="">Selecteer je rol</option>
+                    <option value="aanbieder">GGZ-aanbieder</option>
+                    <option value="gemeente">Gemeente / beleidsmaker</option>
+                    <option value="huisarts">Huisarts / verwijzer</option>
+                    <option value="professional">Zorgprofessional</option>
+                    <option value="onderzoeker">Onderzoeker</option>
+                    <option value="anders">Anders</option>
+                  </select>
+                </div>
+                <button className="mt-2 w-full rounded-lg bg-white px-6 py-3 text-sm font-bold text-teal-700 shadow-lg hover:bg-teal-50 transition flex items-center justify-center gap-2">
+                  <ArrowRight className="h-4 w-4" />
+                  Sluit je aan bij de beweging
+                </button>
+                <p className="text-xs text-white/50 text-center">
+                  Dit is een demonstratie. In de definitieve versie wordt je aanmelding verwerkt.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============ ONTDEK MEER ============ */}
+      <section className="bg-surface-50 py-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="text-2xl font-bold text-foreground text-center sm:text-3xl">Ontdek meer</h2>
+          <p className="mt-2 text-center text-gray-500">Verdiep je in de data, test je kennis en word actief</p>
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <Link href="/dashboard" className="group rounded-2xl border border-surface-200 bg-white p-6 shadow-sm hover:shadow-md hover:border-primary-200 transition-all">
+              <BarChart3 className="h-8 w-8 text-primary-600" />
+              <h3 className="mt-3 text-lg font-semibold text-foreground group-hover:text-primary-700">Impact Dashboard</h3>
+              <p className="mt-1 text-sm text-gray-500">Bekijk de voortgang per aanbieder en het competitieve overzicht.</p>
+              <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-primary-600">
+                Bekijk dashboard <ArrowRight className="h-3.5 w-3.5" />
+              </span>
             </Link>
-            <Link
-              href="/community#professionals"
-              className="inline-flex items-center gap-2 rounded-lg border border-white/30 px-6 py-3 text-sm font-semibold text-white hover:bg-white/10 transition"
-            >
-              <Users className="h-4 w-4" />
-              Vind professionals
+            <Link href="/gemeentekaart" className="group rounded-2xl border border-surface-200 bg-white p-6 shadow-sm hover:shadow-md hover:border-primary-200 transition-all">
+              <MapPin className="h-8 w-8 text-teal-600" />
+              <h3 className="mt-3 text-lg font-semibold text-foreground group-hover:text-primary-700">Gemeentekaart</h3>
+              <p className="mt-1 text-sm text-gray-500">Interactieve kaart met scores en kosten per gemeente in ZHZ.</p>
+              <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-primary-600">
+                Open kaart <ArrowRight className="h-3.5 w-3.5" />
+              </span>
+            </Link>
+            <Link href="/quiz" className="group rounded-2xl border border-surface-200 bg-white p-6 shadow-sm hover:shadow-md hover:border-primary-200 transition-all">
+              <Lightbulb className="h-8 w-8 text-amber-500" />
+              <h3 className="mt-3 text-lg font-semibold text-foreground group-hover:text-primary-700">Kennisquiz</h3>
+              <p className="mt-1 text-sm text-gray-500">Test je kennis over de jeugdzorg in 7 vragen. Hoe goed ken jij de feiten?</p>
+              <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-primary-600">
+                Start de quiz <ArrowRight className="h-3.5 w-3.5" />
+              </span>
+            </Link>
+            <Link href="/community" className="group rounded-2xl border border-surface-200 bg-white p-6 shadow-sm hover:shadow-md hover:border-primary-200 transition-all">
+              <MessageSquare className="h-8 w-8 text-violet-500" />
+              <h3 className="mt-3 text-lg font-semibold text-foreground group-hover:text-primary-700">Community</h3>
+              <p className="mt-1 text-sm text-gray-500">Stel vragen, deel ervaringen en vind collega-professionals.</p>
+              <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-primary-600">
+                Naar het forum <ArrowRight className="h-3.5 w-3.5" />
+              </span>
             </Link>
           </div>
         </div>
