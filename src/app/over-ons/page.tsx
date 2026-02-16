@@ -4,7 +4,7 @@ import { ArrowRight, Target, Eye, Users, Lightbulb } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Over ons',
-  description: 'Over MyCareTeam: het platform voor jeugd GGZ initiatieven in Zuid-Holland Zuid.',
+  description: 'Over Kwaliteit-Als-Medicijn-ZHZ: het platform voor jeugd GGZ initiatieven in Zuid-Holland Zuid.',
 };
 
 const principles = [
@@ -33,12 +33,12 @@ const principles = [
 export default function OverOnsPage() {
   return (
     <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
-      <h1 className="text-2xl font-bold text-foreground sm:text-3xl">Over MyCareTeam</h1>
+      <h1 className="text-2xl font-bold text-foreground sm:text-3xl">Over Kwaliteit-Als-Medicijn-ZHZ</h1>
 
       <section className="mt-8">
         <h2 className="text-lg font-semibold text-foreground">Onze missie</h2>
         <p className="mt-3 text-gray-600 leading-relaxed">
-          MyCareTeam maakt alle lopende en afgeronde initiatieven rondom volume-reductie en Kwaliteit
+          Kwaliteit-Als-Medicijn-ZHZ maakt alle lopende en afgeronde initiatieven rondom volume-reductie en Kwaliteit
           als Medicijn in de jeugd GGZ van Zuid-Holland Zuid zichtbaar, vindbaar en deelbaar. Zo
           kunnen zorgaanbieders en professionals leren van elkaar, kennis kopiëren en
           doorontwikkelen, en samen werken aan betere zorg met minder volumes.

@@ -1,5 +1,5 @@
 export const siteConfig = {
-  naam: 'MyCareTeam',
+  naam: 'Kwaliteit-Als-Medicijn-ZHZ',
   beschrijving: 'Platform voor jeugd GGZ initiatieven in Zuid-Holland Zuid',
   regio: 'Zuid-Holland Zuid',
   tagline: 'Samen werken aan minder volumes, betere kwaliteit',
