@@ -228,6 +228,61 @@ export default async function OrganisatieDetailPage({
         </section>
       )}
 
+      {/* Mini-profiel voor niet-kopgroep organisaties */}
+      {!org.kopgroepProfiel && (
+        <section className="mt-10">
+          <h2 className="text-xl font-semibold text-foreground flex items-center gap-2">
+            <Building2 className="h-5 w-5 text-primary-600" />
+            Organisatieprofiel
+          </h2>
+          <div className="mt-4 grid gap-4 sm:grid-cols-2">
+            <div className="rounded-xl border border-surface-200 bg-white p-5">
+              <h3 className="text-sm font-semibold text-gray-900 mb-3">Over deze organisatie</h3>
+              <p className="text-sm text-gray-600 leading-relaxed">{org.beschrijving}</p>
+              <div className="mt-4 flex flex-wrap gap-3">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700">
+                  <MapPin className="h-3 w-3" />
+                  {org.regio}
+                </span>
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700">
+                  <Building2 className="h-3 w-3" />
+                  {org.type === 'ggz-instelling' ? 'GGZ-instelling' : org.type === 'jeugdzorg-aanbieder' ? 'Jeugdzorgaanbieder' : org.type === 'gemeente' ? 'Gemeente' : org.type}
+                </span>
+              </div>
+            </div>
+            <div className="rounded-xl border border-surface-200 bg-white p-5">
+              <h3 className="text-sm font-semibold text-gray-900 mb-3">Contact</h3>
+              <div className="space-y-3 text-sm text-gray-600">
+                <div className="flex items-center gap-2">
+                  <Users className="h-4 w-4 text-gray-400" />
+                  <span>Contactpersoon: <em className="text-gray-400">Nog niet beschikbaar</em></span>
+                </div>
+                {org.website ? (
+                  <div className="flex items-center gap-2">
+                    <Globe className="h-4 w-4 text-gray-400" />
+                    <a href={org.website} target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:text-primary-700 underline">
+                      {org.website.replace(/^https?:\/\/(www\.)?/, '')}
+                    </a>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <Globe className="h-4 w-4 text-gray-400" />
+                    <span className="text-gray-400 italic">Website niet bekend</span>
+                  </div>
+                )}
+                <div className="flex items-center gap-2">
+                  <MapPin className="h-4 w-4 text-gray-400" />
+                  <span>{org.regio}</span>
+                </div>
+              </div>
+              <p className="mt-4 text-xs text-gray-400 italic">
+                Wilt u opgenomen worden met uitgebreide contactgegevens? Neem contact op met het KAM-programmabureau.
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
+
       {orgProjects.length > 0 && (
         <section className="mt-10">
           <h2 className="text-xl font-semibold text-foreground">Projecten</h2>

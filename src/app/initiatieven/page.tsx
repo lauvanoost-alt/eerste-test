@@ -169,7 +169,7 @@ const initiatieven: Initiatief[] = [
       'Laagdrempelige afstemming tussen behandelaar en begeleider. Contractuele mogelijkheden voor groepsbegeleiding als apart product. Fysieke ruimte voor groepssessies.',
     businessCase:
       'In ontwikkeling. Groepsbegeleiding versus individueel biedt aanzienlijke effici\u00ebntiewinst. Potentieel \u20AC0,3 \u2013 0,8 mln regionaal per jaar.',
-    clientPadFase: 'Behandeltraject & afronding',
+    clientPadFase: 'Behandeltraject',
   },
 ];
 

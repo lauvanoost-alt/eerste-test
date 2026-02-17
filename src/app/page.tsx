@@ -20,6 +20,7 @@ import {
   Footprints,
   Stethoscope,
   Landmark,
+  Sparkles,
 } from 'lucide-react';
 
 /* ------------------------------------------------------------------ */
@@ -139,13 +140,6 @@ const journeyStages = [
         saving: 'Niet gekwantificeerd',
         color: 'teal',
       },
-    ],
-  },
-  {
-    id: 5,
-    label: 'Afronding en nazorg',
-    short: 'Afronding',
-    initiatives: [
       {
         num: 5,
         title: 'Integraal Zorgaanbod',
@@ -155,6 +149,12 @@ const journeyStages = [
         color: 'orange',
       },
     ],
+  },
+  {
+    id: 5,
+    label: 'Afronding en nazorg',
+    short: 'Afronding',
+    initiatives: [] as { num: number; title: string; provider: string; effect: string; saving: string; color: string }[],
   },
 ];
 
@@ -302,6 +302,240 @@ const savingsData = {
   cumulativeSavingsAutonome: [0.0, 0.7, 2.5, 5.3, 9.1],
 };
 
+function LineChart({
+  baseline,
+  withKAM,
+  cumulative,
+  years,
+  visible,
+  baselineColor,
+  baselineLabel,
+}: {
+  baseline: number[];
+  withKAM: number[];
+  cumulative: number[];
+  years: string[];
+  visible: boolean;
+  baselineColor: string;
+  baselineLabel: string;
+}) {
+  const allValues = [...baseline, ...withKAM];
+  const minVal = Math.floor(Math.min(...allValues) - 1);
+  const maxVal = Math.ceil(Math.max(...allValues) + 1);
+  const range = maxVal - minVal;
+
+  // SVG dimensions
+  const W = 600;
+  const H = 300;
+  const padL = 50;
+  const padR = 30;
+  const padT = 30;
+  const padB = 40;
+  const chartW = W - padL - padR;
+  const chartH = H - padT - padB;
+
+  const toX = (i: number) => padL + (i / (years.length - 1)) * chartW;
+  const toY = (v: number) => padT + ((maxVal - v) / range) * chartH;
+
+  const baselinePath = baseline.map((v, i) => `${i === 0 ? 'M' : 'L'}${toX(i)},${toY(v)}`).join(' ');
+  const kamPath = withKAM.map((v, i) => `${i === 0 ? 'M' : 'L'}${toX(i)},${toY(v)}`).join(' ');
+
+  // Area between the two lines (from index 1 onward where they diverge)
+  const areaPath = [
+    `M${toX(1)},${toY(baseline[1])}`,
+    ...baseline.slice(2).map((v, i) => `L${toX(i + 2)},${toY(v)}`),
+    `L${toX(years.length - 1)},${toY(withKAM[years.length - 1])}`,
+    ...[...withKAM].slice(1, -1).reverse().map((v, i) => `L${toX(years.length - 2 - i)},${toY(v)}`),
+    'Z',
+  ].join(' ');
+
+  // Y-axis grid lines
+  const yTicks: number[] = [];
+  for (let v = Math.ceil(minVal); v <= Math.floor(maxVal); v += 1) {
+    yTicks.push(v);
+  }
+
+  return (
+    <div className="relative">
+      <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-auto" style={{ maxHeight: '340px' }}>
+        {/* Grid lines */}
+        {yTicks.map((v) => (
+          <g key={v}>
+            <line x1={padL} y1={toY(v)} x2={W - padR} y2={toY(v)} stroke="#e5e7eb" strokeWidth={1} />
+            <text x={padL - 8} y={toY(v) + 4} textAnchor="end" fontSize={11} fill="#9ca3af">
+              {v}
+            </text>
+          </g>
+        ))}
+
+        {/* Y-axis label */}
+        <text x={14} y={padT + chartH / 2} textAnchor="middle" fontSize={11} fill="#6b7280" transform={`rotate(-90, 14, ${padT + chartH / 2})`}>
+          &euro; mln
+        </text>
+
+        {/* X-axis labels */}
+        {years.map((year, i) => (
+          <text key={year} x={toX(i)} y={H - 8} textAnchor="middle" fontSize={12} fontWeight={600} fill="#374151">
+            {year}
+          </text>
+        ))}
+
+        {/* Shaded area between lines (besparingspotentieel) */}
+        <path
+          d={areaPath}
+          fill="#10b981"
+          opacity={visible ? 0.18 : 0}
+          style={{ transition: 'opacity 1s ease 0.5s' }}
+        />
+
+        {/* Baseline line */}
+        <path
+          d={baselinePath}
+          fill="none"
+          stroke={baselineColor}
+          strokeWidth={3}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeDasharray={visible ? '0' : '1000'}
+          strokeDashoffset={visible ? '0' : '1000'}
+          style={{ transition: 'stroke-dashoffset 1.5s ease 0.2s' }}
+        />
+
+        {/* KAM line */}
+        <path
+          d={kamPath}
+          fill="none"
+          stroke="#10b981"
+          strokeWidth={3}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeDasharray={visible ? '0' : '1000'}
+          strokeDashoffset={visible ? '0' : '1000'}
+          style={{ transition: 'stroke-dashoffset 1.5s ease 0.4s' }}
+        />
+
+        {/* Data points & labels for baseline */}
+        {baseline.map((v, i) => (
+          <g key={`b-${i}`}>
+            <circle
+              cx={toX(i)} cy={toY(v)} r={5}
+              fill={baselineColor} stroke="white" strokeWidth={2}
+              opacity={visible ? 1 : 0}
+              style={{ transition: `opacity 0.4s ease ${0.3 + i * 0.15}s` }}
+            />
+            <text
+              x={toX(i)} y={toY(v) - 12}
+              textAnchor="middle" fontSize={11} fontWeight={700}
+              fill={baselineColor}
+              opacity={visible ? 1 : 0}
+              style={{ transition: `opacity 0.4s ease ${0.3 + i * 0.15}s` }}
+            >
+              {v.toFixed(1)}
+            </text>
+          </g>
+        ))}
+
+        {/* Data points & labels for KAM */}
+        {withKAM.map((v, i) => (
+          <g key={`k-${i}`}>
+            <circle
+              cx={toX(i)} cy={toY(v)} r={5}
+              fill="#10b981" stroke="white" strokeWidth={2}
+              opacity={visible ? 1 : 0}
+              style={{ transition: `opacity 0.4s ease ${0.5 + i * 0.15}s` }}
+            />
+            <text
+              x={toX(i)} y={toY(v) + 20}
+              textAnchor="middle" fontSize={11} fontWeight={700}
+              fill="#059669"
+              opacity={visible ? 1 : 0}
+              style={{ transition: `opacity 0.4s ease ${0.5 + i * 0.15}s` }}
+            >
+              {v.toFixed(1)}
+            </text>
+          </g>
+        ))}
+
+        {/* Saving annotations between the lines */}
+        {years.map((_, i) => {
+          if (i === 0) return null;
+          const saving = baseline[i] - withKAM[i];
+          const midY = (toY(baseline[i]) + toY(withKAM[i])) / 2;
+          return (
+            <g key={`s-${i}`}>
+              {/* Dashed connector */}
+              <line
+                x1={toX(i)} y1={toY(baseline[i]) + 6}
+                x2={toX(i)} y2={toY(withKAM[i]) - 6}
+                stroke="#10b981" strokeWidth={1} strokeDasharray="3,3"
+                opacity={visible ? 0.5 : 0}
+                style={{ transition: `opacity 0.5s ease ${0.8 + i * 0.1}s` }}
+              />
+              {/* Saving label in the middle */}
+              <rect
+                x={toX(i) - 28} y={midY - 10}
+                width={56} height={20} rx={10}
+                fill="#ecfdf5" stroke="#a7f3d0" strokeWidth={1}
+                opacity={visible ? 1 : 0}
+                style={{ transition: `opacity 0.5s ease ${0.8 + i * 0.1}s` }}
+              />
+              <text
+                x={toX(i)} y={midY + 4}
+                textAnchor="middle" fontSize={10} fontWeight={800}
+                fill="#059669"
+                opacity={visible ? 1 : 0}
+                style={{ transition: `opacity 0.5s ease ${0.8 + i * 0.1}s` }}
+              >
+                -&euro;{saving.toFixed(1)}M
+              </text>
+            </g>
+          );
+        })}
+      </svg>
+
+      {/* Legend */}
+      <div className="flex flex-wrap justify-center gap-6 mt-4 text-sm">
+        <div className="flex items-center gap-2">
+          <span className="w-4 h-1 rounded-full" style={{ backgroundColor: baselineColor }} />
+          <span className="text-gray-600">{baselineLabel}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="w-4 h-1 rounded-full bg-emerald-500" />
+          <span className="text-gray-600">Met KAM-interventies</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="w-4 h-3 rounded-sm bg-emerald-500/20" />
+          <span className="text-gray-600">Besparingspotentieel</span>
+        </div>
+      </div>
+
+      {/* Cumulative savings row */}
+      <div className="mt-6 rounded-xl bg-emerald-50 border border-emerald-200 p-4">
+        <p className="text-sm font-semibold text-emerald-800 mb-3">Cumulatieve besparing t.o.v. scenario zonder KAM</p>
+        <div className="grid grid-cols-5 gap-2">
+          {years.map((year, idx) => (
+            <div key={year} className="text-center">
+              <div
+                className="rounded-lg bg-emerald-100 p-2"
+                style={{
+                  opacity: visible ? 1 : 0,
+                  transform: visible ? 'translateY(0)' : 'translateY(10px)',
+                  transition: `opacity 0.5s ease ${0.8 + idx * 0.1}s, transform 0.5s ease ${0.8 + idx * 0.1}s`,
+                }}
+              >
+                <p className="text-lg sm:text-xl font-extrabold text-emerald-700">
+                  &euro;{cumulative[idx].toFixed(1)}M
+                </p>
+              </div>
+              <p className="text-xs text-gray-500 mt-1">{year}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function CumulativeSavingsSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
@@ -324,7 +558,6 @@ function CumulativeSavingsSection() {
   const baseline = activeScenario === 'historical' ? savingsData.historicalGrowth : savingsData.autonomeGroei;
   const withKAM = activeScenario === 'historical' ? savingsData.historicalWithKAM : savingsData.autonomeWithKAM;
   const cumulative = activeScenario === 'historical' ? savingsData.cumulativeSavingsHistorical : savingsData.cumulativeSavingsAutonome;
-  const maxVal = Math.max(...baseline) + 1;
 
   return (
     <section ref={sectionRef} id="besparingspotentieel" className="scroll-mt-28 bg-surface-50 py-16">
@@ -334,7 +567,7 @@ function CumulativeSavingsSection() {
           <div>
             <h2 className="text-2xl font-bold text-foreground sm:text-3xl">Cumulatief Besparingspotentieel</h2>
             <p className="mt-1 text-gray-500">
-              Projectie 2025&ndash;2029 &mdash; interessant voor wethouders en beleidsmakers
+              Projectie 2025&ndash;2029 &mdash; het groeiende vlak tussen de lijnen toont het besparingspotentieel
             </p>
           </div>
         </div>
@@ -384,87 +617,17 @@ function CumulativeSavingsSection() {
               </h3>
               <p className="text-xs text-gray-400 mt-1">Basis: ~&euro;18 mln huidig, KAM-interventies 15-20% reductie opbouwend over 3 jaar</p>
             </div>
-            <div className="flex gap-4 text-xs">
-              <div className="flex items-center gap-2">
-                <span className={`w-3 h-3 rounded-sm ${activeScenario === 'historical' ? 'bg-red-400' : 'bg-amber-400'}`} />
-                <span className="text-gray-600">Zonder KAM</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="w-3 h-3 rounded-sm bg-emerald-500" />
-                <span className="text-gray-600">Met KAM</span>
-              </div>
-            </div>
           </div>
 
-          {/* Bar chart */}
-          <div className="flex items-end gap-4 sm:gap-6 h-64 sm:h-72">
-            {savingsData.years.map((year, idx) => {
-              const baseHeight = (baseline[idx] / maxVal) * 100;
-              const kamHeight = (withKAM[idx] / maxVal) * 100;
-              const saving = baseline[idx] - withKAM[idx];
-              const baseColor = activeScenario === 'historical' ? 'bg-red-300' : 'bg-amber-300';
-              return (
-                <div key={year} className="flex flex-col items-center flex-1 gap-1">
-                  <div className="text-center mb-1">
-                    {saving > 0.05 && (
-                      <span className="text-xs font-bold text-emerald-600 block">
-                        -&euro;{saving.toFixed(1)}M
-                      </span>
-                    )}
-                  </div>
-                  <div className="w-full flex items-end justify-center gap-1" style={{ height: '200px' }}>
-                    <div
-                      className={`w-full max-w-[28px] rounded-t-md ${baseColor} relative`}
-                      style={{
-                        height: visible ? `${baseHeight}%` : '0%',
-                        transition: `height 1s cubic-bezier(0.4,0,0.2,1) ${idx * 0.12}s`,
-                      }}
-                    >
-                      <span className="absolute -top-5 left-1/2 -translate-x-1/2 text-[10px] font-semibold text-gray-500 whitespace-nowrap">
-                        {baseline[idx].toFixed(1)}
-                      </span>
-                    </div>
-                    <div
-                      className="w-full max-w-[28px] rounded-t-md bg-emerald-500 relative"
-                      style={{
-                        height: visible ? `${kamHeight}%` : '0%',
-                        transition: `height 1s cubic-bezier(0.4,0,0.2,1) ${idx * 0.12 + 0.1}s`,
-                      }}
-                    >
-                      <span className="absolute -top-5 left-1/2 -translate-x-1/2 text-[10px] font-semibold text-emerald-700 whitespace-nowrap">
-                        {withKAM[idx].toFixed(1)}
-                      </span>
-                    </div>
-                  </div>
-                  <span className="text-sm font-bold text-gray-700 mt-2">{year}</span>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Cumulative savings row */}
-          <div className="mt-8 rounded-xl bg-emerald-50 border border-emerald-200 p-4">
-            <p className="text-sm font-semibold text-emerald-800 mb-3">Cumulatieve besparing t.o.v. scenario zonder KAM</p>
-            <div className="grid grid-cols-5 gap-2">
-              {savingsData.years.map((year, idx) => (
-                <div key={year} className="text-center">
-                  <div
-                    className="rounded-lg bg-emerald-100 p-2"
-                    style={{
-                      opacity: visible ? 1 : 0,
-                      transform: visible ? 'translateY(0)' : 'translateY(10px)',
-                      transition: `opacity 0.5s ease ${0.8 + idx * 0.1}s, transform 0.5s ease ${0.8 + idx * 0.1}s`,
-                    }}
-                  >
-                    <p className="text-lg sm:text-xl font-extrabold text-emerald-700">
-                      &euro;{cumulative[idx].toFixed(1)}M
-                    </p>
-                  </div>
-                  <p className="text-xs text-gray-500 mt-1">{year}</p>
-                </div>
-              ))}
-            </div>
-          </div>
+          <LineChart
+            baseline={baseline}
+            withKAM={withKAM}
+            cumulative={cumulative}
+            years={savingsData.years}
+            visible={visible}
+            baselineColor={activeScenario === 'historical' ? '#f87171' : '#fbbf24'}
+            baselineLabel={activeScenario === 'historical' ? 'Zonder KAM (hist. groei ~5%/j)' : 'Zonder KAM (autonome groei)'}
+          />
 
           <p className="mt-4 text-xs text-gray-400 leading-relaxed">
             * Projectiecijfers zijn indicatief en gebaseerd op het besparingspotentieel van 15-20% bij volledige
@@ -771,7 +934,7 @@ export default function HomePage() {
             <h2 className="text-2xl font-bold text-foreground sm:text-3xl">Wat betekent dit voor jou?</h2>
             <p className="mt-2 text-gray-500">Ontdek wat dit platform voor jouw rol kan betekenen</p>
           </div>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {/* Zorgprofessional */}
             <Link
               href="/initiatieven"
@@ -844,6 +1007,44 @@ export default function HomePage() {
                 </p>
                 <span className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-primary-600 group-hover:gap-1.5 transition-all">
                   Gemeentekaart &amp; Dashboard <ArrowRight className="h-3 w-3" />
+                </span>
+              </div>
+            </Link>
+
+            {/* Verwijzer (Huisarts / POH-GGZ) */}
+            <Link
+              href="/initiatieven"
+              className="group flex items-start gap-4 rounded-xl border border-surface-200 bg-surface-50 p-4 hover:border-primary-300 hover:shadow-md transition-all"
+            >
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-sky-100 text-sky-700">
+                <Heart className="h-5 w-5" />
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold text-foreground">Verwijzer (Huisarts / POH-GGZ)</h3>
+                <p className="mt-1 text-xs text-gray-500 leading-relaxed">
+                  Ontdek het aanbod, de trajecten en hoe je gericht kunt verwijzen naar passende zorg.
+                </p>
+                <span className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-primary-600 group-hover:gap-1.5 transition-all">
+                  Initiatieven &amp; Organisaties <ArrowRight className="h-3 w-3" />
+                </span>
+              </div>
+            </Link>
+
+            {/* Overig / Nieuwsgierig */}
+            <Link
+              href="/quiz"
+              className="group flex items-start gap-4 rounded-xl border border-surface-200 bg-surface-50 p-4 hover:border-primary-300 hover:shadow-md transition-all"
+            >
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-violet-100 text-violet-700">
+                <Sparkles className="h-5 w-5" />
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold text-foreground">Overig / Nieuwsgierig</h3>
+                <p className="mt-1 text-xs text-gray-500 leading-relaxed">
+                  Gewoon benieuwd? Verken het platform vrijblijvend en ontdek wat er speelt in de jeugd-GGZ.
+                </p>
+                <span className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-primary-600 group-hover:gap-1.5 transition-all">
+                  Quiz &amp; Blog <ArrowRight className="h-3 w-3" />
                 </span>
               </div>
             </Link>

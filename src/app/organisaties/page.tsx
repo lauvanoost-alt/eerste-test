@@ -183,22 +183,24 @@ export default function OrganisatiesPage() {
               {filtered
                 .filter((o) => !o.isKopgroep)
                 .map((org) => (
-                  <div
+                  <Link
                     key={org.slug}
-                    className="flex items-center gap-3 rounded-xl border border-gray-200 bg-white p-4 shadow-sm transition hover:border-primary-200 hover:shadow-md"
+                    href={`/organisaties/${org.slug}`}
+                    className="group flex items-center gap-3 rounded-xl border border-gray-200 bg-white p-4 shadow-sm transition hover:border-primary-200 hover:shadow-md"
                   >
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-gray-500">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-gray-500 group-hover:bg-primary-50 group-hover:text-primary-600 transition-colors">
                       <Building2 className="h-4 w-4" />
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-semibold text-gray-900">
+                      <p className="truncate text-sm font-semibold text-gray-900 group-hover:text-primary-700">
                         {org.naam}
                       </p>
                       <p className="truncate text-xs text-gray-400">
                         {typeLabels[org.type] || org.type} &middot; {org.regio}
                       </p>
                     </div>
-                  </div>
+                    <ChevronRight className="h-4 w-4 shrink-0 text-gray-300 transition group-hover:text-primary-400 group-hover:translate-x-0.5" />
+                  </Link>
                 ))}
             </div>
           </>

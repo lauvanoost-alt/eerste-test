@@ -27,6 +27,15 @@ interface InitiativeOption {
   sggzReductionPct: number;
   bggzReductionPct: number;
   sggzToBggzShiftPct: number;
+  /** Variable cost per SGGZ youth that participates in this initiative */
+  costPerSggzYouth: number;
+  /** Fixed implementation cost at organisatie level */
+  fixedCostOrganisatie: number;
+  /** Fixed implementation cost at regio level */
+  fixedCostRegio: number;
+  /** Fixed implementation cost at landelijk level */
+  fixedCostLandelijk: number;
+  costNote: string;
 }
 
 const initiativeOptions: InitiativeOption[] = [
@@ -37,6 +46,11 @@ const initiativeOptions: InitiativeOption[] = [
     sggzReductionPct: 11,
     bggzReductionPct: 0,
     sggzToBggzShiftPct: 40,
+    costPerSggzYouth: 1277,
+    fixedCostOrganisatie: 25_000,
+    fixedCostRegio: 80_000,
+    fixedCostLandelijk: 1_500_000,
+    costNote: 'Trajectkosten \u20AC1.277 per jeugdige (triage, e-health, groepssessies, eindgesprek)',
   },
   {
     id: 'brede-intake',
@@ -45,6 +59,11 @@ const initiativeOptions: InitiativeOption[] = [
     sggzReductionPct: 14,
     bggzReductionPct: 0,
     sggzToBggzShiftPct: 40,
+    costPerSggzYouth: 250,
+    fixedCostOrganisatie: 30_000,
+    fixedCostRegio: 100_000,
+    fixedCostLandelijk: 2_000_000,
+    costNote: 'Extra intakekosten \u20AC250 per jeugdige (2 uur \u00E0 \u20AC125/u: specialist + ervaringsdeskundige)',
   },
   {
     id: 'kracht-van-kort',
@@ -53,6 +72,11 @@ const initiativeOptions: InitiativeOption[] = [
     sggzReductionPct: 15,
     bggzReductionPct: 10,
     sggzToBggzShiftPct: 0,
+    costPerSggzYouth: 0,
+    fixedCostOrganisatie: 60_000,
+    fixedCostRegio: 200_000,
+    fixedCostLandelijk: 4_000_000,
+    costNote: 'Trainingskosten behandelaars, methodiek-implementatie, tussentijdse evaluatiesystemen',
   },
   {
     id: 'gezinsgerichte-aanpak',
@@ -61,6 +85,11 @@ const initiativeOptions: InitiativeOption[] = [
     sggzReductionPct: 5,
     bggzReductionPct: 5,
     sggzToBggzShiftPct: 0,
+    costPerSggzYouth: 0,
+    fixedCostOrganisatie: 45_000,
+    fixedCostRegio: 150_000,
+    fixedCostLandelijk: 3_000_000,
+    costNote: 'Opzet gezinscentra, training systeemgericht werken, co\u00F6rdinatie meerdere aanbieders',
   },
   {
     id: 'integraal-zorgaanbod',
@@ -69,10 +98,13 @@ const initiativeOptions: InitiativeOption[] = [
     sggzReductionPct: 8,
     bggzReductionPct: 5,
     sggzToBggzShiftPct: 0,
+    costPerSggzYouth: 0,
+    fixedCostOrganisatie: 40_000,
+    fixedCostRegio: 120_000,
+    fixedCostLandelijk: 2_500_000,
+    costNote: 'Groepsruimte, co\u00F6rdinatie behandelaar-begeleider, groepsbegeleidingsmethodiek',
   },
 ];
-
-const IMPLEMENTATION_COST_PER_INITIATIVE = 50_000;
 
 /* ------------------------------------------------------------------ */
 /*  HELPERS                                                            */
@@ -281,12 +313,25 @@ export default function ImpactSimulatorPage() {
     const cumulativeBggzReduced = bggzReduced * years;
     const cumulativeShiftedToBggz = shiftedToBggz * years;
 
+    // Investment calculation: fixed costs + variable costs per youth
+    const fixedCosts = selected.reduce((sum, init) => {
+      if (scale === 'landelijk') return sum + init.fixedCostLandelijk;
+      if (scale === 'regio') return sum + init.fixedCostRegio;
+      return sum + init.fixedCostOrganisatie;
+    }, 0);
+
+    // Variable costs: per-youth costs for initiatives that have them
+    const variableCostsPerYear = selected.reduce((sum, init) => {
+      return sum + init.costPerSggzYouth * sggz;
+    }, 0);
+
+    const totalInvestment = fixedCosts + variableCostsPerYear * years;
+
     // Break-even
-    const totalInvestment =
-      selected.length * IMPLEMENTATION_COST_PER_INITIATIVE;
+    const netSavingsPerYear = totalSavingsPerYear - variableCostsPerYear;
     const breakEvenMonths =
-      totalSavingsPerYear > 0
-        ? Math.ceil((totalInvestment / totalSavingsPerYear) * 12)
+      netSavingsPerYear > 0
+        ? Math.ceil((fixedCosts / netSavingsPerYear) * 12)
         : null;
 
     return {
@@ -300,11 +345,14 @@ export default function ImpactSimulatorPage() {
       totalSavings,
       totalSavingsPerYear,
       totalInvestment,
+      fixedCosts,
+      variableCostsPerYear,
+      netSavingsPerYear,
       breakEvenMonths,
       initiativeCount: selected.length,
       years,
     };
-  }, [sggzVolume, bggzVolume, sggzCost, bggzCost, selectedInitiatives, years]);
+  }, [sggzVolume, bggzVolume, sggzCost, bggzCost, selectedInitiatives, years, scale]);
 
   const hasInput =
     (typeof sggzVolume === 'number' && sggzVolume > 0) ||
@@ -703,6 +751,11 @@ export default function ImpactSimulatorPage() {
                               </span>
                             )}
                           </div>
+                          {isActive && (
+                            <p className="mt-2 text-xs text-gray-400 italic leading-relaxed">
+                              {init.costNote}
+                            </p>
+                          )}
                         </div>
                       </div>
                     </button>
@@ -878,12 +931,19 @@ export default function ImpactSimulatorPage() {
                       </div>
                       <div className="flex flex-col gap-1 mt-3 text-sm text-indigo-100">
                         <span>
-                          Totale investering:{' '}
+                          Totale investering ({results.years}j):{' '}
                           {formatEuro(results.totalInvestment)}
                         </span>
                         <span className="text-xs text-indigo-200">
-                          ({formatEuro(IMPLEMENTATION_COST_PER_INITIATIVE)} per
-                          initiatief x {results.initiativeCount})
+                          Vaste kosten (implementatie): {formatEuro(results.fixedCosts)}
+                        </span>
+                        {results.variableCostsPerYear > 0 && (
+                          <span className="text-xs text-indigo-200">
+                            Variabele kosten: {formatEuro(results.variableCostsPerYear)}/jaar
+                          </span>
+                        )}
+                        <span className="text-xs text-indigo-200">
+                          Netto besparing: {formatEuro(results.netSavingsPerYear)}/jaar
                         </span>
                       </div>
                     </div>
@@ -948,9 +1008,10 @@ export default function ImpactSimulatorPage() {
               <code className="bg-indigo-100 px-1.5 py-0.5 rounded text-xs font-mono text-indigo-700">
                 1 - &prod;(1 - reductie_i)
               </code>{' '}
-              om dubbeltellingen te voorkomen. Implementatiekosten zijn
-              geschat op {formatEuro(IMPLEMENTATION_COST_PER_INITIATIVE)} per
-              initiatief.
+              om dubbeltellingen te voorkomen. Investeringskosten bestaan uit
+              vaste implementatiekosten (die meeschalen met het niveau: organisatie,
+              regio of landelijk) en variabele kosten per jeugdige (o.a.
+              overbruggingszorg: &euro;1.277/jeugdige, brede intake: &euro;250/jeugdige).
             </p>
           </div>
         </div>
