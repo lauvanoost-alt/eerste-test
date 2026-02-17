@@ -688,7 +688,7 @@ const problemSteps: StoryStep[] = [
   {
     number: '132%',
     label: 'stijging jeugdzorguitgaven in 10 jaar',
-    description: 'In 2023 bedroegen de totale uitgaven \u20AC7,2 miljard (+11% t.o.v. 2022). Voor 2024 is de prognose \u20AC8,1 miljard (+12%). De kosten stijgen structureel harder dan het beschikbare budget.',
+    description: 'In 2024 bedroegen de totale uitgaven ruim \u20AC8 miljard, een stijging van 12% ten opzichte van het jaar daarvoor.',
     icon: AlertTriangle,
     color: 'from-orange-500 to-red-500',
     bgGlow: 'bg-orange-500',
