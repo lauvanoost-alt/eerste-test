@@ -655,19 +655,44 @@ function CumulativeSavingsSection() {
 /*  SCROLLYTELLING DATA STORY                                          */
 /* ------------------------------------------------------------------ */
 
-const storySteps = [
+interface StoryStep {
+  number: string;
+  label: string;
+  description: string;
+  icon: typeof AlertTriangle;
+  color: string;
+  bgGlow: string;
+  quote?: string;
+  quoteAuthor?: string;
+  source?: string;
+  sourceUrl?: string;
+}
+
+const storySteps: StoryStep[] = [
   {
-    number: '€1,3 mrd',
-    label: 'Totale kosten jeugdzorg Nederland',
-    description: 'De uitgaven aan jeugd-GGZ zijn in 10 jaar met 132% gestegen. Gemeenten komen structureel geld tekort.',
+    number: '44',
+    label: 'weken wacht een kind gemiddeld op hulp',
+    description: 'Bij 44% van de kinderen gaat het door het wachten slechter. 98% van de hulpverleners ziet lange wachttijden als groot probleem. Kinderen vallen uit op school, vereenzamen en bestaande problemen verergeren.',
+    quote: '\u201cIk weet niet wat er met mij is, ik ben somber en bang. Ik ben op een veilige plek maar ik heb meer hulp nodig, straks gaat het weer mis.\u201d',
+    quoteAuthor: 'Nathalie (12 jaar)',
+    source: 'Stichting Het Vergeten Kind',
+    sourceUrl: 'https://www.hetvergetenkind.nl/nieuws/onderzoek-het-vergeten-kind-kind-in-nood-wacht-gemiddeld-44-weken-op-hulp/',
+    icon: Clock,
+    color: 'from-rose-500 to-red-500',
+    bgGlow: 'bg-rose-500',
+  },
+  {
+    number: '132%',
+    label: 'stijging jeugdzorguitgaven sinds decentralisatie',
+    description: 'In 2023 bedroegen de totale uitgaven \u20AC7,2 miljard (+11% t.o.v. 2022). Voor 2024 is de prognose \u20AC8,1 miljard (+12%). De kosten stijgen structureel harder dan het beschikbare budget.',
     icon: AlertTriangle,
     color: 'from-red-500 to-orange-500',
     bgGlow: 'bg-red-500',
   },
   {
-    number: '90%',
-    label: 'van gemeenten overschrijdt het jeugdzorgbudget',
-    description: 'Vrijwel elke gemeente kampt met tekorten. De huidige aanpak is onhoudbaar — niet voor gemeenten, niet voor aanbieders, niet voor jongeren.',
+    number: '\u20AC828 mln',
+    label: 'tekort in 2024 \u2014 de kloof groeit',
+    description: 'Het budget (\u20AC7,2 mrd) groeit niet mee met de uitgaven (\u20AC8,1 mrd). Het tekort groeide van \u20AC628 mln in 2023 naar \u20AC828 mln in 2024. Vrijwel elke gemeente kampt met overschrijdingen.',
     icon: Building2,
     color: 'from-orange-500 to-amber-500',
     bgGlow: 'bg-orange-500',
@@ -683,7 +708,7 @@ const storySteps = [
   {
     number: '5',
     label: 'bewezen initiatieven, 8 koplopers',
-    description: 'De kopgroep van 8 aanbieders in Zuid-Holland Zuid test 5 concrete interventies. Van overbruggingszorg tot kortdurende behandeling — samen goed voor €2,9 tot €3,8 mln besparing.',
+    description: 'De kopgroep van 8 aanbieders in Zuid-Holland Zuid test 5 concrete interventies. Van overbruggingszorg tot kortdurende behandeling \u2014 samen goed voor \u20AC2,9 tot \u20AC3,8 mln besparing.',
     icon: Zap,
     color: 'from-primary-500 to-indigo-500',
     bgGlow: 'bg-primary-500',
@@ -762,6 +787,28 @@ function DataStorySection() {
                     </p>
                     <p className="mt-1 text-lg sm:text-xl font-semibold text-white/90">{step.label}</p>
                     <p className="mt-2 text-sm sm:text-base text-slate-400 leading-relaxed max-w-lg">{step.description}</p>
+                    {step.quote && (
+                      <blockquote className="mt-4 border-l-2 border-rose-400/50 pl-4 py-1">
+                        <p className="text-sm sm:text-base italic text-white/80 leading-relaxed">{step.quote}</p>
+                        {step.quoteAuthor && (
+                          <footer className="mt-1.5 text-xs text-slate-400">
+                            &mdash; {step.quoteAuthor}
+                          </footer>
+                        )}
+                      </blockquote>
+                    )}
+                    {step.source && (
+                      <p className="mt-2 text-xs text-slate-500">
+                        Bron:{' '}
+                        {step.sourceUrl ? (
+                          <a href={step.sourceUrl} target="_blank" rel="noopener noreferrer" className="underline hover:text-slate-300 transition">
+                            {step.source}
+                          </a>
+                        ) : (
+                          step.source
+                        )}
+                      </p>
+                    )}
                   </div>
                 </div>
               );

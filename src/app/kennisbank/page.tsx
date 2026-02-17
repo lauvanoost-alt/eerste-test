@@ -50,6 +50,11 @@ export default function KennisbankPage() {
             Frameworks, instrumenten, beslisbomen, richtlijnen en publicaties rondom
             Kwaliteit als Medicijn en de 5 initiatieven.
           </p>
+          <div className="mt-4 rounded-lg bg-white/15 backdrop-blur-sm border border-white/20 px-4 py-2.5">
+            <p className="text-sm text-primary-100">
+              <strong className="text-white">Let op:</strong> De items in deze kennisbank zijn <strong className="text-white">demo-inhoud</strong> ter illustratie van het platform. Wordt aangevuld met echte publicaties en instrumenten.
+            </p>
+          </div>
         </div>
       </div>
 
