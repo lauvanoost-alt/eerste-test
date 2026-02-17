@@ -11,6 +11,9 @@ import {
   Heart,
   Building2,
   MessageSquare,
+  Mail,
+  CalendarDays,
+  Upload,
   Award,
   Lightbulb,
   CheckCircle2,
@@ -25,6 +28,9 @@ import {
   Target,
   Zap,
   GripVertical,
+  User,
+  Briefcase,
+  Send,
 } from 'lucide-react';
 
 /* ------------------------------------------------------------------ */
@@ -649,19 +655,44 @@ function CumulativeSavingsSection() {
 /*  SCROLLYTELLING DATA STORY                                          */
 /* ------------------------------------------------------------------ */
 
-const storySteps = [
+interface StoryStep {
+  number: string;
+  label: string;
+  description: string;
+  icon: typeof AlertTriangle;
+  color: string;
+  bgGlow: string;
+  quote?: string;
+  quoteAuthor?: string;
+  source?: string;
+  sourceUrl?: string;
+}
+
+const storySteps: StoryStep[] = [
   {
-    number: '€1,3 mrd',
-    label: 'Totale kosten jeugdzorg Nederland',
-    description: 'De uitgaven aan jeugd-GGZ zijn in 10 jaar met 132% gestegen. Gemeenten komen structureel geld tekort.',
+    number: '44',
+    label: 'weken wacht een kind gemiddeld op hulp',
+    description: 'Bij 44% van de kinderen gaat het door het wachten slechter. 98% van de hulpverleners ziet lange wachttijden als groot probleem. Kinderen vallen uit op school, vereenzamen en bestaande problemen verergeren.',
+    quote: '\u201cIk weet niet wat er met mij is, ik ben somber en bang. Ik ben op een veilige plek maar ik heb meer hulp nodig, straks gaat het weer mis.\u201d',
+    quoteAuthor: 'Nathalie (12 jaar)',
+    source: 'Stichting Het Vergeten Kind',
+    sourceUrl: 'https://www.hetvergetenkind.nl/nieuws/onderzoek-het-vergeten-kind-kind-in-nood-wacht-gemiddeld-44-weken-op-hulp/',
+    icon: Clock,
+    color: 'from-rose-500 to-red-500',
+    bgGlow: 'bg-rose-500',
+  },
+  {
+    number: '132%',
+    label: 'stijging jeugdzorguitgaven sinds decentralisatie',
+    description: 'In 2023 bedroegen de totale uitgaven \u20AC7,2 miljard (+11% t.o.v. 2022). Voor 2024 is de prognose \u20AC8,1 miljard (+12%). De kosten stijgen structureel harder dan het beschikbare budget.',
     icon: AlertTriangle,
     color: 'from-red-500 to-orange-500',
     bgGlow: 'bg-red-500',
   },
   {
-    number: '90%',
-    label: 'van gemeenten overschrijdt het jeugdzorgbudget',
-    description: 'Vrijwel elke gemeente kampt met tekorten. De huidige aanpak is onhoudbaar — niet voor gemeenten, niet voor aanbieders, niet voor jongeren.',
+    number: '\u20AC828 mln',
+    label: 'tekort in 2024 \u2014 de kloof groeit',
+    description: 'Het budget (\u20AC7,2 mrd) groeit niet mee met de uitgaven (\u20AC8,1 mrd). Het tekort groeide van \u20AC628 mln in 2023 naar \u20AC828 mln in 2024. Vrijwel elke gemeente kampt met overschrijdingen.',
     icon: Building2,
     color: 'from-orange-500 to-amber-500',
     bgGlow: 'bg-orange-500',
@@ -677,7 +708,7 @@ const storySteps = [
   {
     number: '5',
     label: 'bewezen initiatieven, 8 koplopers',
-    description: 'De kopgroep van 8 aanbieders in Zuid-Holland Zuid test 5 concrete interventies. Van overbruggingszorg tot kortdurende behandeling — samen goed voor €2,9 tot €3,8 mln besparing.',
+    description: 'De kopgroep van 8 aanbieders in Zuid-Holland Zuid test 5 concrete interventies. Van overbruggingszorg tot kortdurende behandeling \u2014 samen goed voor \u20AC2,9 tot \u20AC3,8 mln besparing.',
     icon: Zap,
     color: 'from-primary-500 to-indigo-500',
     bgGlow: 'bg-primary-500',
@@ -756,6 +787,28 @@ function DataStorySection() {
                     </p>
                     <p className="mt-1 text-lg sm:text-xl font-semibold text-white/90">{step.label}</p>
                     <p className="mt-2 text-sm sm:text-base text-slate-400 leading-relaxed max-w-lg">{step.description}</p>
+                    {step.quote && (
+                      <blockquote className="mt-4 border-l-2 border-rose-400/50 pl-4 py-1">
+                        <p className="text-sm sm:text-base italic text-white/80 leading-relaxed">{step.quote}</p>
+                        {step.quoteAuthor && (
+                          <footer className="mt-1.5 text-xs text-slate-400">
+                            &mdash; {step.quoteAuthor}
+                          </footer>
+                        )}
+                      </blockquote>
+                    )}
+                    {step.source && (
+                      <p className="mt-2 text-xs text-slate-500">
+                        Bron:{' '}
+                        {step.sourceUrl ? (
+                          <a href={step.sourceUrl} target="_blank" rel="noopener noreferrer" className="underline hover:text-slate-300 transition">
+                            {step.source}
+                          </a>
+                        ) : (
+                          step.source
+                        )}
+                      </p>
+                    )}
                   </div>
                 </div>
               );
@@ -773,7 +826,7 @@ function DataStorySection() {
               document.getElementById('initiatieven')?.scrollIntoView({ behavior: 'smooth' });
             }}
           >
-            Bekijk de oplossing
+            Ontdek onze bijdrage aan een oplossing
             <ArrowRight className="h-4 w-4" />
           </a>
         </div>
@@ -899,6 +952,7 @@ const navSections = [
   { id: 'clientpad', label: 'Cli\u00ebntpad' },
   { id: 'besparingspotentieel', label: 'Besparingen' },
   { id: 'succesverhaal', label: 'Succesverhaal' },
+  { id: 'roadmap', label: 'Waar staan we' },
   { id: 'wie-ben-jij', label: 'Voor jou' },
   { id: 'doe-mee', label: 'Doe mee' },
 ];
@@ -962,6 +1016,121 @@ function StickyNav() {
         </div>
       </div>
     </nav>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  SIGNUP FORM                                                        */
+/* ------------------------------------------------------------------ */
+
+function SignupForm() {
+  const [submitted, setSubmitted] = useState(false);
+
+  if (submitted) {
+    return (
+      <div className="mt-10 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 p-8 text-center max-w-xl mx-auto">
+        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-green-400/20 mx-auto mb-4">
+          <Sparkles className="h-7 w-7 text-green-300" />
+        </div>
+        <h3 className="text-lg font-bold text-white">Welkom bij de beweging!</h3>
+        <p className="mt-2 text-sm text-white/70 max-w-xs mx-auto">
+          Bedankt voor je interesse. In de definitieve versie ontvang je een bevestiging per
+          e-mail met volgende stappen.
+        </p>
+        <button
+          type="button"
+          onClick={() => setSubmitted(false)}
+          className="mt-4 text-xs text-white/50 underline hover:text-white/70 transition"
+        >
+          Opnieuw invullen
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="mt-10 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 p-8 max-w-2xl mx-auto">
+      <h3 className="text-xl font-bold text-white mb-2">Aanmelden</h3>
+      <p className="text-sm text-white/70 mb-6 leading-relaxed">
+        Enthousiast? Meld je aan om op de hoogte te blijven en mee te doen met de kopgroep.
+        Verbind je met andere professionals en draag bij aan passende jeugdzorg.
+      </p>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          setSubmitted(true);
+        }}
+      >
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div>
+            <label htmlFor="signup-naam" className="block text-xs font-medium text-white/70 mb-1">
+              Naam
+            </label>
+            <div className="relative">
+              <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/40" />
+              <input
+                id="signup-naam"
+                type="text"
+                placeholder="Bijv. Jan de Vries"
+                className="w-full rounded-lg bg-white/10 border border-white/20 py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-white/30"
+              />
+            </div>
+          </div>
+          <div>
+            <label htmlFor="signup-email" className="block text-xs font-medium text-white/70 mb-1">
+              E-mailadres
+            </label>
+            <div className="relative">
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/40" />
+              <input
+                id="signup-email"
+                type="email"
+                placeholder="jan@organisatie.nl"
+                className="w-full rounded-lg bg-white/10 border border-white/20 py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-white/30"
+              />
+            </div>
+          </div>
+          <div>
+            <label htmlFor="signup-org" className="block text-xs font-medium text-white/70 mb-1">
+              Organisatie
+            </label>
+            <div className="relative">
+              <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/40" />
+              <input
+                id="signup-org"
+                type="text"
+                placeholder="Bijv. GGZ Drechtsteden"
+                className="w-full rounded-lg bg-white/10 border border-white/20 py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-white/30"
+              />
+            </div>
+          </div>
+          <div>
+            <label htmlFor="signup-rol" className="block text-xs font-medium text-white/70 mb-1">
+              Rol / Functie
+            </label>
+            <div className="relative">
+              <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/40" />
+              <input
+                id="signup-rol"
+                type="text"
+                placeholder="Bijv. GZ-psycholoog, Beleidsadviseur"
+                className="w-full rounded-lg bg-white/10 border border-white/20 py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-white/30"
+              />
+            </div>
+          </div>
+        </div>
+        <button
+          type="submit"
+          className="mt-6 w-full inline-flex items-center justify-center gap-2 rounded-lg bg-white px-5 py-3 text-sm font-bold text-teal-700 shadow-lg hover:bg-white/90 transition"
+        >
+          <Send className="h-4 w-4" />
+          Sluit je aan
+        </button>
+        <p className="mt-3 text-center text-xs text-white/40">
+          Dit is een demo-formulier. Geen gegevens worden opgeslagen.
+        </p>
+      </form>
+    </div>
   );
 }
 
@@ -1038,6 +1207,60 @@ export default function HomePage() {
                 <p className="mt-1 text-xs text-primary-200">{stat.label}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ============ DOELGROEP ROUTING ============ */}
+      <section className="bg-surface-50 border-b border-surface-200 py-8">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <p className="text-center text-sm font-semibold text-gray-500 uppercase tracking-wide mb-5">
+            Ik ben...
+          </p>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <Link
+              href="/gemeentekaart"
+              className="group flex flex-col items-center rounded-xl border-2 border-surface-200 bg-white p-4 text-center hover:border-primary-300 hover:shadow-md transition-all"
+            >
+              <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-primary-100 text-primary-700 group-hover:bg-primary-200 transition-colors">
+                <Landmark className="h-5 w-5" />
+              </div>
+              <span className="mt-2 text-sm font-semibold text-gray-800">Wethouder</span>
+              <span className="mt-0.5 text-[11px] text-gray-400 leading-tight">Wat kost jeugdzorg in mijn gemeente?</span>
+            </Link>
+
+            <Link
+              href="/kwaliteit-als-medicijn"
+              className="group flex flex-col items-center rounded-xl border-2 border-surface-200 bg-white p-4 text-center hover:border-primary-300 hover:shadow-md transition-all"
+            >
+              <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-primary-100 text-primary-700 group-hover:bg-primary-200 transition-colors">
+                <Building2 className="h-5 w-5" />
+              </div>
+              <span className="mt-2 text-sm font-semibold text-gray-800">Zorgaanbieder</span>
+              <span className="mt-0.5 text-[11px] text-gray-400 leading-tight">Wat levert aansluiting mij op?</span>
+            </Link>
+
+            <Link
+              href="/initiatieven"
+              className="group flex flex-col items-center rounded-xl border-2 border-surface-200 bg-white p-4 text-center hover:border-primary-300 hover:shadow-md transition-all"
+            >
+              <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-sky-100 text-sky-700 group-hover:bg-sky-200 transition-colors">
+                <Heart className="h-5 w-5" />
+              </div>
+              <span className="mt-2 text-sm font-semibold text-gray-800">Verwijzer / Huisarts</span>
+              <span className="mt-0.5 text-[11px] text-gray-400 leading-tight">Welke trajecten kan ik inzetten?</span>
+            </Link>
+
+            <Link
+              href="/quiz"
+              className="group flex flex-col items-center rounded-xl border-2 border-surface-200 bg-white p-4 text-center hover:border-primary-300 hover:shadow-md transition-all"
+            >
+              <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-violet-100 text-violet-700 group-hover:bg-violet-200 transition-colors">
+                <Sparkles className="h-5 w-5" />
+              </div>
+              <span className="mt-2 text-sm font-semibold text-gray-800">Gewoon nieuwsgierig</span>
+              <span className="mt-0.5 text-[11px] text-gray-400 leading-tight">Test je kennis in de quiz</span>
+            </Link>
           </div>
         </div>
       </section>
@@ -1157,6 +1380,125 @@ export default function HomePage() {
                 </p>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============ COMPACTE ROADMAP / TIJDLIJN ============ */}
+      <section id="roadmap" className="scroll-mt-28 bg-white py-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl font-bold text-foreground sm:text-3xl">Waar staan we nu?</h2>
+            <p className="mt-2 text-gray-500 max-w-2xl mx-auto">
+              De transformatie loopt van eind 2025 tot 2028. Hieronder zie je de voortgang &mdash; en wat de volgende stap is.
+            </p>
+          </div>
+
+          {/* Horizontal timeline */}
+          <div className="relative">
+            {/* Connecting line */}
+            <div className="hidden sm:block absolute top-[28px] left-[8%] right-[8%] h-1 bg-gradient-to-r from-blue-300 via-emerald-300 to-gray-200 rounded-full" />
+
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 relative">
+              {[
+                {
+                  phase: 'Q4 2025',
+                  label: 'KAM gestart',
+                  detail: 'SoJ geeft kopgroep status en steun',
+                  status: 'done' as const,
+                  color: 'blue',
+                },
+                {
+                  phase: 'Q1 2026',
+                  label: 'Eerste plannen',
+                  detail: 'Kopgroep presenteert impact-inschatting',
+                  status: 'current' as const,
+                  color: 'emerald',
+                },
+                {
+                  phase: 'Q3-Q4 2026',
+                  label: 'Eerste resultaten',
+                  detail: 'Impact in de praktijk aantonen',
+                  status: 'upcoming' as const,
+                  color: 'emerald',
+                },
+                {
+                  phase: 'Q1-Q2 2027',
+                  label: 'Contractering',
+                  detail: 'KAM-criteria in nieuwe contracten',
+                  status: 'upcoming' as const,
+                  color: 'blue',
+                },
+                {
+                  phase: '2028',
+                  label: 'Nieuwe standaard',
+                  detail: 'Alle aanbieders werken volgens KAM',
+                  status: 'upcoming' as const,
+                  color: 'amber',
+                },
+              ].map((step, idx) => (
+                <div key={idx} className="flex flex-col items-center text-center">
+                  {/* Node */}
+                  <div className="relative z-10">
+                    {step.status === 'current' && (
+                      <span className="absolute -inset-2 rounded-full bg-emerald-400/30 animate-ping" />
+                    )}
+                    <div
+                      className={`relative w-14 h-14 rounded-full flex items-center justify-center shadow-md ${
+                        step.status === 'done'
+                          ? 'bg-blue-600 text-white'
+                          : step.status === 'current'
+                            ? 'bg-emerald-500 text-white ring-4 ring-emerald-200'
+                            : 'bg-gray-100 text-gray-400 border-2 border-gray-200'
+                      }`}
+                    >
+                      {step.status === 'done' ? (
+                        <CheckCircle2 className="h-6 w-6" />
+                      ) : step.status === 'current' ? (
+                        <Zap className="h-6 w-6" />
+                      ) : (
+                        <Clock className="h-5 w-5" />
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Phase label */}
+                  <p className={`mt-3 text-xs font-bold uppercase tracking-wide ${
+                    step.status === 'current' ? 'text-emerald-600' : step.status === 'done' ? 'text-blue-600' : 'text-gray-400'
+                  }`}>
+                    {step.phase}
+                  </p>
+                  {step.status === 'current' && (
+                    <span className="inline-flex items-center rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-700 mt-1">
+                      NU
+                    </span>
+                  )}
+
+                  {/* Description */}
+                  <p className={`mt-1 text-sm font-semibold leading-tight ${
+                    step.status === 'upcoming' ? 'text-gray-400' : 'text-gray-800'
+                  }`}>
+                    {step.label}
+                  </p>
+                  <p className={`mt-0.5 text-xs leading-tight ${
+                    step.status === 'upcoming' ? 'text-gray-300' : 'text-gray-500'
+                  }`}>
+                    {step.detail}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Link to full timeline */}
+          <div className="mt-8 text-center">
+            <Link
+              href="/kwaliteit-als-medicijn#vuist-op-vuist"
+              className="inline-flex items-center gap-2 text-sm font-medium text-primary-600 hover:text-primary-800 transition-colors"
+            >
+              Bekijk de volledige roadmap met alle 9 stappen
+              <ArrowRight className="h-4 w-4" />
+            </Link>
           </div>
         </div>
       </section>
@@ -1309,79 +1651,90 @@ export default function HomePage() {
             ))}
           </div>
 
-          <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
-            <div>
-              <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-1.5 text-sm font-semibold backdrop-blur-sm">
-                <Heart className="h-4 w-4 text-rose-300" />
-                Doe mee aan de beweging
-              </span>
-              <h2 className="mt-6 text-3xl font-bold leading-tight sm:text-4xl">
-                Enthousiast?<br />
-                Sluit je aan bij de kopgroep.
-              </h2>
-              <p className="mt-4 text-lg text-white/80 leading-relaxed max-w-xl">
-                Samen kunnen we de jeugdzorg in Zuid-Holland Zuid transformeren. Sluit je aan als
-                aanbieder, gemeente of professional en draag bij aan <strong className="text-white">passende zorg, lagere volumes
-                en betere uitkomsten</strong> voor jongeren en gezinnen.
+          <div className="text-center mb-12">
+            <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-1.5 text-sm font-semibold backdrop-blur-sm">
+              <Heart className="h-4 w-4 text-rose-300" />
+              Doe mee
+            </span>
+            <h2 className="mt-6 text-3xl font-bold leading-tight sm:text-4xl">
+              Doe Mee &mdash; Samen Volumes Reduceren
+            </h2>
+            <p className="mt-4 text-lg text-white/80 leading-relaxed max-w-2xl mx-auto">
+              Meld je aan om je bij deze beweging aan te sluiten. Verbind je met andere professionals,
+              deel kennis, en draag bij aan een toekomstbestendige jeugdzorg.
+            </p>
+          </div>
+
+          <div className="grid gap-6 sm:grid-cols-3">
+            {/* Action 1: Nieuwsbrief */}
+            <div className="rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 p-6 hover:bg-white/15 transition-all group">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/20 text-white mb-4">
+                <Mail className="h-6 w-6" />
+              </div>
+              <h3 className="text-lg font-bold">Maandelijkse voortgang</h3>
+              <p className="mt-2 text-sm text-white/70 leading-relaxed">
+                Ontvang elke maand een kort overzicht: wat hebben de initiatieven opgeleverd, wat is de volgende stap, welke data zijn er nieuw.
               </p>
-              <div className="mt-6 space-y-3 text-white/90">
-                <div className="flex items-start gap-3">
-                  <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-300" />
-                  <span>Toegang tot bewezen initiatieven en implementatie-ondersteuning</span>
+              <div className="mt-5">
+                <div className="flex gap-2">
+                  <input
+                    type="email"
+                    placeholder="naam@organisatie.nl"
+                    className="flex-1 rounded-lg bg-white/10 border border-white/20 px-4 py-2.5 text-sm text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-white/30"
+                  />
+                  <button className="rounded-lg bg-white px-4 py-2.5 text-sm font-bold text-teal-700 hover:bg-teal-50 transition shrink-0">
+                    Aanmelden
+                  </button>
                 </div>
-                <div className="flex items-start gap-3">
-                  <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-300" />
-                  <span>Spiegelinformatie en benchmark met andere aanbieders</span>
-                </div>
-                <div className="flex items-start gap-3">
-                  <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-300" />
-                  <span>Contractuele ruimte voor innovatie en kwaliteitsverbetering</span>
-                </div>
-                <div className="flex items-start gap-3">
-                  <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-300" />
-                  <span>Netwerk van gelijkgestemde professionals en organisaties</span>
-                </div>
+                <p className="text-xs text-white/40 mt-2">Demo &mdash; wordt niet verstuurd</p>
               </div>
             </div>
 
-            <div className="rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 p-8">
-              <h3 className="text-xl font-bold">Meld je aan</h3>
-              <p className="mt-1 text-sm text-white/70">Vul je gegevens in en we nemen contact op</p>
-              <div className="mt-6 space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-white/80">Naam</label>
-                  <input type="text" placeholder="Je volledige naam" className="mt-1 w-full rounded-lg bg-white/10 border border-white/20 px-4 py-2.5 text-sm text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-white/30" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-white/80">E-mailadres</label>
-                  <input type="email" placeholder="naam@organisatie.nl" className="mt-1 w-full rounded-lg bg-white/10 border border-white/20 px-4 py-2.5 text-sm text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-white/30" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-white/80">Organisatie</label>
-                  <input type="text" placeholder="Naam van je organisatie" className="mt-1 w-full rounded-lg bg-white/10 border border-white/20 px-4 py-2.5 text-sm text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-white/30" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-white/80">Rol</label>
-                  <select className="mt-1 w-full rounded-lg bg-white/10 border border-white/20 px-4 py-2.5 text-sm text-white/70 focus:outline-none focus:ring-2 focus:ring-white/30">
-                    <option value="">Selecteer je rol</option>
-                    <option value="aanbieder">GGZ-aanbieder</option>
-                    <option value="gemeente">Gemeente / beleidsmaker</option>
-                    <option value="huisarts">Huisarts / verwijzer</option>
-                    <option value="professional">Zorgprofessional</option>
-                    <option value="onderzoeker">Onderzoeker</option>
-                    <option value="anders">Anders</option>
-                  </select>
-                </div>
-                <button className="mt-2 w-full rounded-lg bg-white px-6 py-3 text-sm font-bold text-teal-700 shadow-lg hover:bg-teal-50 transition flex items-center justify-center gap-2">
-                  <ArrowRight className="h-4 w-4" />
-                  Sluit je aan bij de beweging
-                </button>
-                <p className="text-xs text-white/50 text-center">
-                  Dit is een demonstratie. In de definitieve versie wordt je aanmelding verwerkt.
-                </p>
+            {/* Action 2: Kopgroep-overleg */}
+            <div className="rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 p-6 hover:bg-white/15 transition-all group">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/20 text-white mb-4">
+                <CalendarDays className="h-6 w-6" />
               </div>
+              <h3 className="text-lg font-bold">Volgend kopgroep-overleg</h3>
+              <p className="mt-2 text-sm text-white/70 leading-relaxed">
+                Schuif aan bij het eerstvolgende overleg. Presentatie van eerste resultaten overbruggingszorg en stand van zaken brede intake.
+              </p>
+              <div className="mt-5 rounded-xl bg-white/10 border border-white/20 p-4">
+                <div className="flex items-center gap-3">
+                  <div className="text-center">
+                    <p className="text-2xl font-extrabold">27</p>
+                    <p className="text-xs text-white/60 uppercase">Mrt 2026</p>
+                  </div>
+                  <div className="border-l border-white/20 pl-3">
+                    <p className="text-sm font-semibold">Kopgroep-overleg #4</p>
+                    <p className="text-xs text-white/60">14:00 &ndash; 16:00 &bull; Dordrecht</p>
+                  </div>
+                </div>
+              </div>
+              <p className="text-xs text-white/40 mt-2">Demo &mdash; fictieve datum</p>
             </div>
+
+            {/* Action 3: Data bijdragen */}
+            <Link
+              href="/impact-simulator"
+              className="rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 p-6 hover:bg-white/15 transition-all group block"
+            >
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/20 text-white mb-4">
+                <Upload className="h-6 w-6" />
+              </div>
+              <h3 className="text-lg font-bold">Draag je eigen data bij</h3>
+              <p className="mt-2 text-sm text-white/70 leading-relaxed">
+                Reken met je eigen volumes en kosten in de Impact Simulator. Zie direct wat de initiatieven voor jouw organisatie kunnen betekenen.
+              </p>
+              <span className="mt-5 inline-flex items-center gap-2 rounded-lg bg-white px-5 py-2.5 text-sm font-bold text-teal-700 group-hover:bg-teal-50 transition">
+                Open de simulator
+                <ArrowRight className="h-4 w-4" />
+              </span>
+            </Link>
           </div>
+
+          {/* Signup form */}
+          <SignupForm />
         </div>
       </section>
 

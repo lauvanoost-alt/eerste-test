@@ -538,7 +538,7 @@ function DetailPanel({
               </p>
               <p className="mt-2 text-xs text-amber-600">
                 <ArrowRight className="mr-1 inline h-3 w-3" />
-                Be\u00efnvloedbaar via lokaal beleid \u00e9n implementatie van initiatieven door aanbieders (~22% van de variatie)
+                Beïnvloedbaar via lokaal beleid én implementatie van initiatieven door aanbieders (~22% van de variatie)
               </p>
             </div>
           )}

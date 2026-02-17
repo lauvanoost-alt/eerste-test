@@ -36,6 +36,81 @@ interface BlogPost {
 
 const blogPosts: BlogPost[] = [
   {
+    id: 6,
+    title: 'Passende zorg: parallellen tussen de curatieve zorg en jeugdzorg',
+    author: 'Redactie KAM Platform',
+    date: '17 februari 2026',
+    category: 'Visie',
+    categoryColor: 'bg-indigo-100 text-indigo-700',
+    preview:
+      'Ca. 1 op de 7 kinderen maakt gebruik van jeugdzorg. Door de forse groei blijven de maatschappelijke kosten stijgen. Wat kunnen we leren van de curatieve zorg?',
+    fullText: `Ca. 1 op de 7 kinderen maakt gebruik van jeugdzorg. Door de forse groei blijven de maatschappelijke kosten stijgen en tegelijkertijd staat de continu\u00EFteit van veel aanbieders onder druk. Tegen deze achtergrond schrijft de Jeugdautoriteit: \u2018Om de continu\u00EFteit van zorg voor jeugdigen die die zorg het hardst nodig hebben te garanderen, moet de druk op de sector verlicht worden. Daartoe is het noodzakelijk dat jeugdigen die zorg minder hard nodig hebben of op een andere manier geholpen kunnen worden, er minder gebruik van gaan maken zodat het totale beroep op de sector daalt\u2019. Of, zoals Mari\u00EBlle Bruning (hoogleraar jeugdrecht) het verwoordt: \u2018Een verkeerde aanname bij de decentralisatie was: we gaan de vraag naar jeugdhulp verminderen door de hulp dichtbij de burger aan te bieden. Maar er kwamen juist meer burgers met vragen, want ze kregen makkelijker toegang tot hulp. Dat zijn vaak de mensen die mondig zijn, met hulpvragen voor kinderen met wie het relatief best goed gaat\u2019.
+
+Deze onderliggende dynamiek en de beoogde ontwikkeling herkennen wij vanuit de medisch specialistische zorg: een bijkans oneindige latente vraag naar zorg in de maatschappij in combinatie met bekostiging die wel doelmatigheid aanmoedigt (via druk op de tarieven), maar daardoor ook sterk gericht is op productie. Dat leidt vrijwel altijd tot onnodige volumegroei, overdiagnostiek en medicalisering.
+
+Een belangrijk kantelpunt in de curatieve zorg was de ontwikkeling en implementatie van een zogenaamde zinnige zorg \u2013 later passende zorg \u2013 agenda (gestart bij Bernhoven en Rivas en later via contracteringsstrategie\u00EBn van verzekeraars, via Hoofdlijnenakkoorden, innovatiemiddelen landelijk opgeschaald). Het ging en gaat daarbij om het ontwikkelen, ontdekken en opschalen van initiatieven die enerzijds de zorg kwalitatief beter maken en anderzijds minder beslag op personeel en financi\u00EBn leggen. Een belangrijke voorwaarde om deze agenda van de grond te krijgen, is dat aanbieders die hierin voorop durven te gaan lopen via de contractering gefaciliteerd worden (met innovatieruimte, betere contracten, etc.). Anders leidt het inzetten op preventie en minder medicalisering tot omzetverlies en komt de beweging niet van de grond.
+
+Deze aanpak is aantoonbaar effectief geweest met 7-13% volume reductie binnen 2 jaar na de start bij bijvoorbeeld Rivas en Bernhoven (gevalideerd door CBP). Mede op basis van deze ervaringen is de volumegroei in de medisch specialistische zorg tot nul-groei teruggebracht (via contractering, ondersteund door Hoofdlijnenakkoorden en vastgelegd in meerjarenramingen). In feite is met deze agenda een vorm van competitie gecre\u00EBerd om zo snel mogelijk sociale doelen te bereiken via variatie (koplopers), selectie (leren van de zorgverleners) en opschaling (via de contractering).
+
+\u2014\u2014\u2014
+
+Landelijke innovatie agenda voor passende jeugdzorg
+
+Wij geloven \u2013 en merken in de praktijk \u2013 dat een soortgelijke beweging van grote waarde kan zijn om ook in de jeugdzorg op verantwoorde manier volumes te reduceren. Op basis van ervaringen in de curatieve zorg en eerste gesprekken in de jeugdzorg lijkt een volumereductie van 10-20% mogelijk. Vertaald naar de jeugdzorg vraagt dit om een systematische \u2018passende jeugdzorg\u2019-agenda:
+
+1. Het initi\u00EBren van koplopers die o.b.v. andere werkwijzen volumes reduceren
+2. Het cre\u00EBren van transparantie over passende jeugdzorg werkwijzen
+3. Het stimuleren van het opschalen van deze werkwijzen vanuit transparantie en contractering
+4. Het ondersteunen van deze landelijke agenda met gerichte transformatiegelden
+
+1. Initi\u00EBren van koplopers die o.b.v. andere werkwijzen volumes reduceren
+
+In onze ervaring zijn er veel jeugdzorgaanbieders die zien dat het anders kan en moet. Veel bestuurders van jeugdzorgaanbieders geven achter de schermen aan dat er niet te weinig geld is voor jeugdzorg, maar dat het aan de verkeerde dingen wordt uitgegeven. De manier van betalen (door druk op tarieven telkens minder marge) en contracteren (veelal open einde) leidt, tezamen met een groot \u2018grijs\u2019 gebied in indicatiestelling en veelal beperkt bewijs over wat werkt, al snel tot maximale zorg voor de relatief \u2018lichte\u2019 categorie cli\u00EBnten i.p.v. optimale zorg voor wie dat het meeste nodig heeft.
+
+Financiers, of het nu verzekeraars, gemeenten of zorgkantoren zijn, weten niet wat betere zorg is. Voor die inzichten hebben ze aanbieders en zorgverleners zelf nodig. Het aangrijpingspunt voor een passende zorg agenda is dat de aanbieders zelf de vraag oproepen of de antwoorden die vanuit het veld hierop geven worden wel de juiste zijn \u2013 en of we daar gegeven het budget- en personeelskrapte de juiste keuzes in maken.
+
+Een voorbeeld vanuit gemeente Veendam laat in de praktijk zien dat een andere visie op een organisatie van de jeugdzorg al snel leidt tot lagere kosten en volumes door een combinatie van factoren: 1) reduceren van 80 aanbieders tot een samenwerkingsverband van 6 aanbieders, 2) inzetten van hoogopgeleide en ervaren professionals aan de voordeur om direct een goede triage te doen, 3) laagdrempelig toegankelijk maken van jeugdhulp op basisscholen en in huisartspraktijken, 4) normaliseren (onzekere ouders uitleggen dat het gedrag van hun kind bij de ontwikkeling hoort en overgaat) en ook vaker niets doen (\u2018baat het niet dan schaadt het wel\u2019). Het resultaat: wachtlijsten zijn verdwenen in 2 jaar en kosten per cli\u00EBnt zijn fors verlaagd.
+
+In Zuid Holland Zuid werken wij nu aan een passende jeugdzorg traject met een groot aantal gemeenten, een gezamenlijke inkooporganisatie en een kopgroep van 7 aanbieders om passende zorg werkwijzen op te halen die tot minder medicalisering en lagere volumes leiden (voorbeeld initiatieven: brede intake, overbruggingszorg, \u2018de kracht van kort behandelen\u2019). Dit traject laat zien dat er veel aanbieders zijn die willen laten zien wat zij anders kunnen doen om volumes te verlagen en wat dat vraagt van aanbieders en contracterende partijen. Hiermee krijgen financiers ook zicht op wat wel en niet werkt en wordt de gebruikelijke en hinderlijke informatieasymmetrie opgeheven.
+
+2. Cre\u00EBren van transparantie over passende jeugdzorg werkwijzen
+
+Een agenda van \u2018passende zorg\u2019 die transparantie bevordert, sluit direct aan op de oproep van de commissie van wijzen om het potentieel om binnen de Jeugdzorg van elkaar te leren beter te benutten. De decentralisatie heeft de organisatie van zorg dichter bij het gezin gebracht. Het effect hiervan is ook dat er een grote verscheidenheid aan werkwijzen en van contractering is ontstaan (jeugdzorgkosten per inwoner vari\u00EBren sterk tussen gemeenten; komt deels door populatiekenmerken, maar ook door het aanbod en de lokale manier van werken). Het grote nadeel van de decentralisatie is echter dat geen instantie overzicht houdt over deze natuurlijk variatie in werkwijze, onderzoekt wat wel en niet werkt en de beste werkwijzen kan opschalen.
+
+Het cre\u00EBren van transparantie over passende werkwijzen helpt gemeenten en de VNG om hier beter op te sturen. We zien hierin ook een parallel met het AZWA. De AZWA-partijen verzamelen vanuit iedere sector passende zorginitiatieven en prioriteren de initiatieven die bij opschaling de meeste impact hebben op de transitiedoelen. De afspraak is dat zorgaanbieders deze initiatieven zo snel mogelijk implementeren, en dat zorgverzekeraars de werkzame elementen congruent contracteren.
+
+Het rijk en de VNG kunnen bij uitstek een rol spelen om deze dynamiek tot stand te brengen, en inzicht te bieden in regionale verschillen en de kennisuitwisseling en opschaling van werkwijzen tussen regio\u2019s te stimuleren.
+
+3. Stimuleren van de opschaling van deze werkwijzen o.b.v. transparantie en contractering
+
+Aanbieders moeten actief bewogen worden om passende zorg werkwijzen te ontwikkelen en in te voeren, omdat anders \u2018het juiste gedrag\u2019 direct leidt tot lagere omzet. Dit vraagt een contractering die daarin ondersteunt door voorlopers betere contracten en voorwaarden te geven en de besparing te incasseren bij de achterblijvers.
+
+De huidige contractering gaat veelal uit van open house (een vorm van niet selectieve inkoop: alle aanbieders die aan bepaalde criteria voldoen worden toegestaan), met meestal een productiebekostiging als basis (betaling van het gecontracteerd tarief per uur x het aantal). Deze contractering (en met name de inrichting daarbinnen) leidt gemakkelijk tot onhoudbare volumestijging, omdat dit ook in het voordeel is van de aanbieder en omdat de latente vraag in de maatschappij aanwezig is. Deze ontwikkeling moet gekanteld worden en juist de aanbieders belonen die zich inzetten om volumes te reduceren. Bijvoorbeeld door middel van gedifferentieerde contract- en bekostigingsmodellen, waarbij deze passende jeugdzorgaanbieders betere contracten krijgen (passende tarieven, extra innovatiemiddelen, of meer verwijzingen). Een combinatie van deze elementen kan ervoor zorgen dat \u2018passende zorg\u2019 aanbieders een groter aandeel van een kleiner wordend budget krijgen en aanbieders die zich niet aantoonbaar aan deze agenda committeren zich diskwalificeren voor een (ruimhartig) contract.
+
+We zien in de praktijk dat gemeenten ook vaker werken met lumpsum contractafspraken (populatiebekostiging). Dit kan effectief zijn om de totale kosten onder controle te krijgen, maar moet dan wel gepaard gaan met een inhoudelijke agenda, want anders is het risico levensgroot dat dit alleen maar tot oplopende wachtlijsten leidt, wat argumenten geeft om de contracten open te breken en op te hogen.
+
+Op het niveau van regio\u2019s en landelijk is het zinvol te laten zien hoe er is geleerd van zorgaanbieders: welke interventies, en organisatie- en contracteermodellen werkten? Dat levert veel informatie op en geeft rugdekking aan opschaling en een contractering met inhoudelijke meerwaarde.
+
+4. Ondersteunen van deze landelijke agenda met gerichte transformatiegelden
+
+Vanuit de meerjarenraming komt er een groei van budgetten voor de jeugdzorg beschikbaar. Het zonder meer aanwenden van deze middelen voor meer productie geeft in theorie de financi\u00EBle ruimte om wachtlijsten weg te werken. Maar als er aan de werkwijzen en aan de manier van contractering niet veel verandert, zal extra geld geen oplossing zijn. Het re\u00EBle risico bestaat dat extra groeiruimte niet tot reductie van wachtlijsten leidt maar tot een verdere aanwas van het aanbod en daarmee de vraag.
+
+Ons voorstel is om in elk geval een deel van deze extra middelen uit het groeipad gericht in te zetten voor een innovatiefonds, dat eraan bijdraagt om aanbieders die vanuit passende jeugdzorg juist volumes willen gaan reduceren via betere zorg, te belonen met de innovatiemiddelen; om vervolgens hun zorginitiatieven en hun impact inzichtelijk te maken, zodat deze opgeschaald kunnen worden. Vergelijkbaar met de IZA transformatiegelden ontstaat zo een innovatiepot die de ambitie aanwakkert bij aanbieders om koploper op het gebied van passende jeugdzorg te zijn en de rijksoverheid en de gemeenten instrumentarium aanreikt om die beweging structureel in te bedden.
+
+Tot slot
+
+De problematiek in de jeugdzorg met onhoudbaar stijgende volumes, etikettering, medicalisering (ook van zelfbeelden), een personeelstekort dat alleen maar zal toenemen en inherente organisatorische complexiteit (veel inkopende gemeenten/landsdelen/inkooporganisaties en een groot aantal aanbieders) vraagt om nieuwe oplossingen. Met een systematische agenda van passende zorg (inhoud) en een stelselontwerp dat actief bijdraagt aan het uitlokken, honoreren en opschalen van passende zorginitiatieven (via contractering) kan de Nederlandse jeugdzorg een impuls krijgen. Dit vraagt lef van aanbieders \u00E9n financiers en een landelijke regierol, gecombineerd met innovatiemiddelen om deze beweging te ondersteunen.`,
+    likes: 37,
+    comments: [
+      {
+        id: 1,
+        author: 'Dr. Joost Vermeij',
+        date: '17 feb 2026',
+        text: 'Sterke analyse. De parallel met Bernhoven en Rivas is precies waar het om draait. Laten we hopen dat de politieke wil er is om dit door te zetten.',
+      },
+    ],
+  },
+  {
     id: 1,
     title: 'Eerste resultaten overbruggingszorg: 20% minder instroom in SGGZ',
     author: 'Dr. Marieke van den Berg',
@@ -265,6 +340,14 @@ export default function BlogPage() {
           <p className="mt-2 text-gray-500">
             Nieuws, inzichten en verhalen over de transformatie van jeugdzorg in Zuid-Holland Zuid
           </p>
+
+          {/* Demo disclaimer */}
+          <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 flex items-start gap-3">
+            <span className="mt-0.5 shrink-0 text-amber-500 text-lg leading-none">&bull;</span>
+            <p className="text-sm text-amber-800 leading-relaxed">
+              <strong>Let op:</strong> De blogposts hieronder zijn grotendeels <strong>demo-inhoud</strong> ter illustratie van het platform. Deze worden aangevuld en vervangen door echte publicaties zodra het platform live gaat.
+            </p>
+          </div>
         </div>
 
         {/* Blog posts */}
