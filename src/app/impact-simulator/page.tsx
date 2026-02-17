@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import {
   Calculator,
   TrendingDown,
@@ -14,6 +14,7 @@ import {
   Info,
   MapPin,
   Globe,
+  Download,
 } from 'lucide-react';
 
 /* ------------------------------------------------------------------ */
@@ -362,6 +363,145 @@ export default function ImpactSimulatorPage() {
   const hasInput =
     (typeof sggzVolume === 'number' && sggzVolume > 0) ||
     (typeof bggzVolume === 'number' && bggzVolume > 0);
+
+  const downloadBusinesscase = useCallback(() => {
+    if (!results) return;
+    const sggz = typeof sggzVolume === 'number' ? sggzVolume : 0;
+    const bggz = typeof bggzVolume === 'number' ? bggzVolume : 0;
+    const selectedNames = initiativeOptions
+      .filter((i) => selectedInitiatives.has(i.id))
+      .map((i) => i.name);
+
+    const scaleLabel = scale === 'landelijk' ? 'Landelijk' : scale === 'regio' ? 'ZHZ-regio' : 'Organisatie';
+    const date = new Date().toLocaleDateString('nl-NL', { day: 'numeric', month: 'long', year: 'numeric' });
+
+    const html = `<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<title>Businesscase KAM — Impact Simulator</title>
+<style>
+  @media print { body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 40px; color: #1e293b; line-height: 1.6; }
+  .header { background: linear-gradient(135deg, #4338ca, #7c3aed); color: white; padding: 32px; border-radius: 12px; margin-bottom: 32px; }
+  .header h1 { margin: 0 0 8px; font-size: 28px; }
+  .header p { margin: 0; opacity: 0.85; font-size: 14px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  .card { border: 1px solid #e2e8f0; border-radius: 10px; padding: 20px; }
+  .card h3 { margin: 0 0 12px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #64748b; }
+  .big { font-size: 32px; font-weight: 800; color: #1e293b; }
+  .green { color: #059669; }
+  .purple { color: #7c3aed; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+  th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid #e2e8f0; font-size: 13px; }
+  th { font-weight: 600; color: #64748b; }
+  .section { margin-bottom: 28px; }
+  .section h2 { font-size: 18px; margin: 0 0 12px; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0; }
+  .footer { margin-top: 32px; padding-top: 16px; border-top: 1px solid #e2e8f0; font-size: 11px; color: #94a3b8; }
+  .highlight { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 20px; margin: 16px 0; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>Businesscase: Kwaliteit als Medicijn</h1>
+  <p>Impact Simulator — gegenereerd op ${date}</p>
+</div>
+
+<div class="section">
+  <h2>Uitgangspunten</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>Schaal</h3>
+      <p class="big">${scaleLabel}</p>
+    </div>
+    <div class="card">
+      <h3>Looptijd</h3>
+      <p class="big">${results.years} jaar</p>
+    </div>
+    <div class="card">
+      <h3>SGGZ-volume</h3>
+      <p class="big">${formatNumber(sggz)} /jaar</p>
+    </div>
+    <div class="card">
+      <h3>BGGZ-volume</h3>
+      <p class="big">${formatNumber(bggz)} /jaar</p>
+    </div>
+  </div>
+  <table>
+    <tr><th>Kosten per SGGZ-traject</th><td>${formatEuro(sggzCost)}</td></tr>
+    <tr><th>Kosten per BGGZ-traject</th><td>${formatEuro(bggzCost)}</td></tr>
+  </table>
+</div>
+
+<div class="section">
+  <h2>Geselecteerde initiatieven (${selectedNames.length})</h2>
+  <table>
+    <tr><th>Initiatief</th><th>SGGZ-reductie</th><th>BGGZ-reductie</th><th>SGGZ→BGGZ shift</th></tr>
+    ${initiativeOptions
+      .filter((i) => selectedInitiatives.has(i.id))
+      .map((i) => `<tr><td><strong>${i.name}</strong></td><td>${i.sggzReductionPct}%</td><td>${i.bggzReductionPct}%</td><td>${i.sggzToBggzShiftPct}%</td></tr>`)
+      .join('')}
+  </table>
+</div>
+
+<div class="highlight">
+  <h2 style="border:none;padding:0;margin:0 0 12px;">Verwacht resultaat</h2>
+  <div class="grid">
+    <div>
+      <h3 style="color:#64748b;font-size:12px;margin:0;">Gecombineerde SGGZ-reductie</h3>
+      <p class="big green">${results.combinedSggzReductionPct.toFixed(1)}%</p>
+    </div>
+    <div>
+      <h3 style="color:#64748b;font-size:12px;margin:0;">Gecombineerde BGGZ-reductie</h3>
+      <p class="big green">${results.combinedBggzReductionPct.toFixed(1)}%</p>
+    </div>
+    <div>
+      <h3 style="color:#64748b;font-size:12px;margin:0;">Totale besparing (${results.years}j)</h3>
+      <p class="big green">${formatEuro(results.totalSavings)}</p>
+    </div>
+    <div>
+      <h3 style="color:#64748b;font-size:12px;margin:0;">Netto besparing per jaar</h3>
+      <p class="big green">${formatEuro(results.netSavingsPerYear)}</p>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>Investering</h2>
+  <table>
+    <tr><th>Vaste kosten (implementatie)</th><td>${formatEuro(results.fixedCosts)}</td></tr>
+    ${results.variableCostBreakdown.map((item) => `<tr><th>${item.name} (${formatNumber(item.trajecten)} trajecten &times; ${formatEuro(item.costPerTraject)})</th><td>${formatEuro(item.total)}/jaar</td></tr>`).join('')}
+    <tr><th>Variabele kosten per jaar totaal</th><td>${formatEuro(results.variableCostsPerYear)}</td></tr>
+    <tr style="font-weight:bold;"><th>Totale investering (${results.years}j)</th><td>${formatEuro(results.totalInvestment)}</td></tr>
+  </table>
+</div>
+
+<div class="section">
+  <h2>Volume-effect (${results.years} jaar)</h2>
+  <table>
+    <tr><th>Minder SGGZ-trajecten</th><td>${formatNumber(results.sggzReduced)}</td></tr>
+    <tr><th>Minder BGGZ-trajecten</th><td>${formatNumber(results.bggzReduced)}</td></tr>
+    <tr><th>Verschoven naar BGGZ</th><td>${formatNumber(results.shiftedToBggz)}</td></tr>
+    <tr><th>SGGZ-besparing</th><td>${formatEuro(results.sggzSavings)}</td></tr>
+    <tr><th>BGGZ-besparing</th><td>${formatEuro(results.bggzSavings)}</td></tr>
+    <tr style="font-weight:bold;"><th>Totale besparing</th><td>${formatEuro(results.totalSavings)}</td></tr>
+  </table>
+</div>
+
+<div class="footer">
+  <p>Dit document is gegenereerd door de Kwaliteit als Medicijn Impact Simulator. Alle schattingen zijn indicatief en gebaseerd op regionale gemiddelden en wetenschappelijk onderbouwde aannames. De daadwerkelijke resultaten kunnen afwijken afhankelijk van de specifieke context, implementatiekwaliteit en patiëntenpopulatie.</p>
+  <p style="margin-top:8px;">Gecombineerde reductie: 1 - ∏(1 - reductie_i) | Kwaliteit als Medicijn — Zuid-Holland Zuid</p>
+</div>
+</body>
+</html>`;
+
+    const w = window.open('', '_blank');
+    if (w) {
+      w.document.write(html);
+      w.document.close();
+      setTimeout(() => w.print(), 300);
+    }
+  }, [results, sggzVolume, bggzVolume, sggzCost, bggzCost, selectedInitiatives, scale]);
 
   if (!mounted) return null;
 
@@ -1012,6 +1152,23 @@ export default function ImpactSimulatorPage() {
             </p>
           </div>
         </div>
+
+        {/* Download businesscase button */}
+        {results && (
+          <div className="mt-8 text-center">
+            <button
+              type="button"
+              onClick={downloadBusinesscase}
+              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-8 py-4 text-base font-bold text-white shadow-lg hover:from-indigo-700 hover:to-purple-700 transition-all hover:shadow-xl hover:-translate-y-0.5"
+            >
+              <Download size={20} />
+              Download Businesscase als PDF
+            </button>
+            <p className="mt-2 text-xs text-gray-400">
+              Opent een print-vriendelijke pagina die je als PDF kunt opslaan
+            </p>
+          </div>
+        )}
 
         {/* ============================================================ */}
         {/*  FOOTER                                                      */}
