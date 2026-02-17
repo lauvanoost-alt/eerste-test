@@ -301,8 +301,9 @@ export default function InitiatievenPage() {
 
             return (
               <article
+                id={`initiatief-${idx + 1}`}
                 key={idx}
-                className={`overflow-hidden rounded-2xl border bg-white shadow-sm ${colors.border}`}
+                className={`scroll-mt-24 overflow-hidden rounded-2xl border bg-white shadow-sm ${colors.border}`}
               >
                 {/* Card header */}
                 <div
