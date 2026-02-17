@@ -27,7 +27,7 @@ interface InitiativeOption {
   sggzReductionPct: number;
   bggzReductionPct: number;
   sggzToBggzShiftPct: number;
-  /** Variable cost per SGGZ youth that participates in this initiative */
+  /** Variable cost per trajectory for this initiative */
   costPerSggzYouth: number;
   /** Fixed implementation cost at organisatie level */
   fixedCostOrganisatie: number;
@@ -50,7 +50,7 @@ const initiativeOptions: InitiativeOption[] = [
     fixedCostOrganisatie: 25_000,
     fixedCostRegio: 80_000,
     fixedCostLandelijk: 1_500_000,
-    costNote: 'Trajectkosten \u20AC1.277 per jeugdige (triage, e-health, groepssessies, eindgesprek)',
+    costNote: 'Trajectkosten \u20AC1.277 per traject (triage, e-health, groepssessies, eindgesprek)',
   },
   {
     id: 'brede-intake',
@@ -63,7 +63,7 @@ const initiativeOptions: InitiativeOption[] = [
     fixedCostOrganisatie: 30_000,
     fixedCostRegio: 100_000,
     fixedCostLandelijk: 2_000_000,
-    costNote: 'Extra intakekosten \u20AC250 per jeugdige (2 uur \u00E0 \u20AC125/u: specialist + ervaringsdeskundige)',
+    costNote: 'Extra intakekosten \u20AC250 per traject (2 uur \u00E0 \u20AC125/u: specialist + ervaringsdeskundige)',
   },
   {
     id: 'kracht-van-kort',
@@ -320,19 +320,24 @@ export default function ImpactSimulatorPage() {
       return sum + init.fixedCostOrganisatie;
     }, 0);
 
-    // Variable costs: per-youth costs for initiatives that have them
-    const variableCostsPerYear = selected.reduce((sum, init) => {
-      return sum + init.costPerSggzYouth * sggz;
-    }, 0);
+    // Variable costs: per-trajectory costs for initiatives that have them
+    const variableCostBreakdown = selected
+      .filter((init) => init.costPerSggzYouth > 0)
+      .map((init) => ({
+        name: init.name,
+        costPerTraject: init.costPerSggzYouth,
+        trajecten: sggz,
+        total: init.costPerSggzYouth * sggz,
+      }));
+
+    const variableCostsPerYear = variableCostBreakdown.reduce(
+      (sum, item) => sum + item.total,
+      0
+    );
 
     const totalInvestment = fixedCosts + variableCostsPerYear * years;
 
-    // Break-even
     const netSavingsPerYear = totalSavingsPerYear - variableCostsPerYear;
-    const breakEvenMonths =
-      netSavingsPerYear > 0
-        ? Math.ceil((fixedCosts / netSavingsPerYear) * 12)
-        : null;
 
     return {
       combinedSggzReductionPct: combinedSggzReduction * 100,
@@ -347,8 +352,8 @@ export default function ImpactSimulatorPage() {
       totalInvestment,
       fixedCosts,
       variableCostsPerYear,
+      variableCostBreakdown,
       netSavingsPerYear,
-      breakEvenMonths,
       initiativeCount: selected.length,
       years,
     };
@@ -397,7 +402,7 @@ export default function ImpactSimulatorPage() {
               <TrendingDown size={16} /> Gecombineerde reductieberekening
             </span>
             <span className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm rounded-full px-4 py-1.5 text-sm font-medium">
-              <DollarSign size={16} /> Break-even analyse
+              <DollarSign size={16} /> Investeringsanalyse
             </span>
           </div>
         </div>
@@ -903,46 +908,38 @@ export default function ImpactSimulatorPage() {
                       </div>
                     </div>
 
-                    {/* Break-even */}
+                    {/* Investering & kosten */}
                     <div className="rounded-xl bg-white/15 backdrop-blur-sm p-5">
                       <div className="flex items-center gap-2 mb-3">
                         <Building2 size={18} />
                         <span className="font-semibold text-sm uppercase tracking-wider">
-                          Break-even Analyse
+                          Investering
                         </span>
                       </div>
-                      <div className="flex items-baseline gap-2">
-                        <p className="text-3xl font-extrabold">
-                          {results.breakEvenMonths !== null ? (
-                            <>
-                              <AnimatedCounter
-                                target={results.breakEvenMonths}
-                              />{' '}
-                              <span className="text-lg font-bold text-indigo-200">
-                                maanden
-                              </span>
-                            </>
-                          ) : (
-                            <span className="text-lg text-indigo-200">
-                              Niet berekenbaar
-                            </span>
-                          )}
-                        </p>
-                      </div>
+                      <p className="text-3xl font-extrabold">
+                        <AnimatedCounter
+                          target={results.totalInvestment}
+                          formatFn={(v) => formatEuro(Math.round(v))}
+                        />
+                      </p>
+                      <p className="text-xs text-indigo-200 mt-1">
+                        totale investering over {results.years} jaar
+                      </p>
                       <div className="flex flex-col gap-1 mt-3 text-sm text-indigo-100">
-                        <span>
-                          Totale investering ({results.years}j):{' '}
-                          {formatEuro(results.totalInvestment)}
-                        </span>
                         <span className="text-xs text-indigo-200">
                           Vaste kosten (implementatie): {formatEuro(results.fixedCosts)}
                         </span>
-                        {results.variableCostsPerYear > 0 && (
-                          <span className="text-xs text-indigo-200">
-                            Variabele kosten: {formatEuro(results.variableCostsPerYear)}/jaar
-                          </span>
+                        {results.variableCostBreakdown.length > 0 && (
+                          <div className="mt-1 space-y-0.5">
+                            <span className="text-xs text-indigo-200 font-medium">Variabele kosten per jaar:</span>
+                            {results.variableCostBreakdown.map((item) => (
+                              <span key={item.name} className="block text-xs text-indigo-200 pl-2">
+                                {item.name}: {formatNumber(item.trajecten)} trajecten &times; {formatEuro(item.costPerTraject)} = {formatEuro(item.total)}/jaar
+                              </span>
+                            ))}
+                          </div>
                         )}
-                        <span className="text-xs text-indigo-200">
+                        <span className="text-xs text-indigo-200 mt-1 font-medium">
                           Netto besparing: {formatEuro(results.netSavingsPerYear)}/jaar
                         </span>
                       </div>
@@ -1010,8 +1007,8 @@ export default function ImpactSimulatorPage() {
               </code>{' '}
               om dubbeltellingen te voorkomen. Investeringskosten bestaan uit
               vaste implementatiekosten (die meeschalen met het niveau: organisatie,
-              regio of landelijk) en variabele kosten per jeugdige (o.a.
-              overbruggingszorg: &euro;1.277/jeugdige, brede intake: &euro;250/jeugdige).
+              regio of landelijk) en variabele kosten per traject (o.a.
+              overbruggingszorg: &euro;1.277/traject, brede intake: &euro;250/traject).
             </p>
           </div>
         </div>

@@ -234,9 +234,10 @@ function ClientJourneySection() {
                   {stage.initiatives.map((init, iIdx) => {
                     const ic = initiativeColorMap[init.color] || initiativeColorMap.sky;
                     return (
-                      <div
+                      <Link
                         key={init.num}
-                        className={`rounded-xl border-2 ${ic.border} ${ic.bg} p-3 shadow-sm`}
+                        href={`/initiatieven#initiatief-${init.num}`}
+                        className={`block rounded-xl border-2 ${ic.border} ${ic.bg} p-3 shadow-sm hover:shadow-md hover:scale-[1.02] transition-all cursor-pointer`}
                         style={{
                           opacity: visible ? 1 : 0,
                           transform: visible ? 'scale(1)' : 'scale(0.85)',
@@ -251,7 +252,7 @@ function ClientJourneySection() {
                         <p className="text-xs text-gray-500 mt-1">{init.provider}</p>
                         <p className="text-xs text-gray-600 mt-1.5 leading-relaxed">{init.effect}</p>
                         <p className={`text-xs font-bold ${ic.text} mt-1`}>{init.saving}</p>
-                      </div>
+                      </Link>
                     );
                   })}
                   {stage.initiatives.length === 0 && (
