@@ -22,6 +22,7 @@ import {
   Handshake,
   ArrowRightLeft,
   FileCheck2,
+  Info,
 } from 'lucide-react';
 
 /* ------------------------------------------------------------------ */
@@ -32,21 +33,20 @@ interface Provider {
   name: string;
   initiatives: number;
   volumeReduction: number;
-  efficiencyGain: number;
   revenueImpact: number;
   score: number;
   trend: 'up' | 'down' | 'stable';
 }
 
 const providers: Provider[] = [
-  { name: 'De Hoop', initiatives: 3, volumeReduction: 17.2, efficiencyGain: 24, revenueImpact: 12.5, score: 5, trend: 'up' },
-  { name: 'Perspectief', initiatives: 3, volumeReduction: 15.8, efficiencyGain: 21, revenueImpact: 11.0, score: 5, trend: 'up' },
-  { name: 'Parnassia Groep', initiatives: 2, volumeReduction: 13.4, efficiencyGain: 18, revenueImpact: 9.2, score: 4, trend: 'up' },
-  { name: 'NeuroScan', initiatives: 2, volumeReduction: 11.6, efficiencyGain: 15, revenueImpact: 7.8, score: 4, trend: 'stable' },
-  { name: 'Eleos', initiatives: 2, volumeReduction: 9.8, efficiencyGain: 13, revenueImpact: 6.4, score: 3, trend: 'down' },
-  { name: 'FamilySupporters', initiatives: 1, volumeReduction: 7.2, efficiencyGain: 10, revenueImpact: 5.1, score: 3, trend: 'up' },
-  { name: 'Mentaal Beter', initiatives: 1, volumeReduction: 5.4, efficiencyGain: 7, revenueImpact: 3.6, score: 2, trend: 'down' },
-  { name: 'CareHouse', initiatives: 1, volumeReduction: 3.1, efficiencyGain: 4, revenueImpact: 2.2, score: 2, trend: 'stable' },
+  { name: 'De Hoop', initiatives: 3, volumeReduction: 17.2, revenueImpact: 12.5, score: 5, trend: 'up' },
+  { name: 'Perspectief', initiatives: 3, volumeReduction: 15.8, revenueImpact: 11.0, score: 5, trend: 'up' },
+  { name: 'Parnassia Groep', initiatives: 2, volumeReduction: 13.4, revenueImpact: 9.2, score: 4, trend: 'up' },
+  { name: 'NeuroScan', initiatives: 2, volumeReduction: 11.6, revenueImpact: 7.8, score: 4, trend: 'stable' },
+  { name: 'Eleos', initiatives: 2, volumeReduction: 9.8, revenueImpact: 6.4, score: 3, trend: 'down' },
+  { name: 'FamilySupporters', initiatives: 1, volumeReduction: 7.2, revenueImpact: 5.1, score: 3, trend: 'up' },
+  { name: 'Mentaal Beter', initiatives: 1, volumeReduction: 5.4, revenueImpact: 3.6, score: 2, trend: 'down' },
+  { name: 'CareHouse', initiatives: 1, volumeReduction: 3.1, revenueImpact: 2.2, score: 2, trend: 'stable' },
 ];
 
 /* ------------------------------------------------------------------ */
@@ -178,7 +178,6 @@ export default function DashboardPage() {
 
   // Region totals
   const totalVolumeReduction = providers.reduce((s, p) => s + p.volumeReduction, 0) / providers.length;
-  const totalEfficiency = providers.reduce((s, p) => s + p.efficiencyGain, 0) / providers.length;
   const totalRevenue = providers.reduce((s, p) => s + p.revenueImpact, 0);
 
   // Row colour helper
@@ -242,9 +241,9 @@ export default function DashboardPage() {
             <div className="relative overflow-hidden rounded-2xl bg-white shadow-md shadow-purple-100 border border-purple-100 p-6 group hover:shadow-lg transition-shadow">
               <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full bg-purple-50 group-hover:bg-purple-100 transition-colors" />
               <div className="relative">
-                <span className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-purple-100 text-purple-600 mb-3"><Zap size={20} /></span>
-                <p className="text-sm text-gray-500 font-medium">Gem. Efficiencywinst</p>
-                <p className="text-3xl font-extrabold text-gray-900 mt-1"><AnimatedCounter target={parseFloat(totalEfficiency.toFixed(0))} suffix="%" /></p>
+                <span className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-purple-100 text-purple-600 mb-3"><Target size={20} /></span>
+                <p className="text-sm text-gray-500 font-medium">Actieve Initiatieven</p>
+                <p className="text-3xl font-extrabold text-gray-900 mt-1"><AnimatedCounter target={5} /></p>
               </div>
             </div>
 
@@ -295,13 +294,12 @@ export default function DashboardPage() {
 
           <div className="rounded-2xl bg-white shadow-md border border-gray-100 overflow-hidden">
             {/* Table header */}
-            <div className="hidden lg:grid grid-cols-[48px_1fr_100px_130px_120px_130px_140px_120px] gap-2 px-6 py-3 bg-gray-50 text-xs font-semibold uppercase tracking-wider text-gray-500 border-b">
+            <div className="hidden lg:grid grid-cols-[48px_1fr_100px_130px_130px_140px_120px] gap-2 px-6 py-3 bg-gray-50 text-xs font-semibold uppercase tracking-wider text-gray-500 border-b">
               <span>#</span>
               <span>Aanbieder</span>
               <span className="text-center">Initiatieven</span>
               <Tooltip text="Percentage minder verwijzingen / behandelingen"><span className="text-center">Volumereductie</span></Tooltip>
-              <Tooltip text="Verbetering in doorlooptijd en capaciteit"><span className="text-center">Efficiency</span></Tooltip>
-              <Tooltip text="Stijging omzet per cliënt door kwaliteit"><span className="text-center">Omzetimpact</span></Tooltip>
+              <Tooltip text="Verwachte omzetverandering bij volumedaling"><span className="text-center">Omzetimpact</span></Tooltip>
               <span className="text-center">Score</span>
               <span className="text-center">Trend</span>
             </div>
@@ -312,7 +310,7 @@ export default function DashboardPage() {
               return (
                 <div
                   key={p.name}
-                  className={`grid grid-cols-1 lg:grid-cols-[48px_1fr_100px_130px_120px_130px_140px_120px] gap-2 px-6 py-4 items-center border-b border-gray-100 last:border-none transition-colors ${rowBg(rank)}`}
+                  className={`grid grid-cols-1 lg:grid-cols-[48px_1fr_100px_130px_130px_140px_120px] gap-2 px-6 py-4 items-center border-b border-gray-100 last:border-none transition-colors ${rowBg(rank)}`}
                 >
                   {/* Rank */}
                   <div className="flex items-center gap-2">
@@ -337,12 +335,6 @@ export default function DashboardPage() {
                   <div className="text-center">
                     <span className="font-bold text-indigo-700">{p.volumeReduction}%</span>
                     <ProgressBar value={p.volumeReduction} max={20} color="#6366f1" />
-                  </div>
-
-                  {/* Efficiency */}
-                  <div className="text-center">
-                    <span className="font-bold text-purple-700">{p.efficiencyGain}%</span>
-                    <ProgressBar value={p.efficiencyGain} max={30} color="#8b5cf6" />
                   </div>
 
                   {/* Revenue */}
@@ -379,10 +371,20 @@ export default function DashboardPage() {
             {/* Header banner */}
             <div className="bg-gradient-to-r from-emerald-600 to-teal-600 px-6 py-4 text-white">
               <p className="text-sm font-medium text-emerald-100">Wachtlijstbemiddeling &amp; Volumeherverdeling</p>
-              <p className="mt-1 text-lg font-bold">Efficienter werken zonder omzetverlies</p>
+              <p className="mt-1 text-lg font-bold">Volumedaling zonder omzetverlies</p>
             </div>
 
             <div className="p-6 sm:p-8">
+              <div className="rounded-xl bg-amber-50 border border-amber-200 p-4 mb-8 flex items-start gap-3">
+                <Info size={20} className="text-amber-600 shrink-0 mt-0.5" />
+                <p className="text-sm text-amber-800 leading-relaxed">
+                  <strong>Belangrijk:</strong> De volumereductie hierboven gaat over het totaal aantal behandelingen in de regio. In de praktijk
+                  wordt de vrijgekomen capaciteit bij koplopers direct weer opgevuld via wachtlijstbemiddeling en sturing van
+                  verwijzers. Behandelingen duren korter, maar aanbieders kunnen m&eacute;&eacute;r jeugdigen met dezelfde capaciteit helpen.
+                  De omzet per aanbieder blijft daardoor relatief gelijk &mdash; of groeit zelfs.
+                </p>
+              </div>
+
               <p className="text-sm text-gray-600 leading-relaxed max-w-3xl mb-8">
                 Aanbieders die vooroplopen in kwaliteitsverbetering mogen daar niet financieel voor gestraft worden.
                 Via wachtlijstbemiddeling en volumeherverdeling wordt ervoor gezorgd dat koplopers hun omzet behouden
@@ -415,7 +417,7 @@ export default function DashboardPage() {
                     <div>
                       <h4 className="font-semibold text-gray-900 text-sm">Geen Negatief Effect op Aanbieders</h4>
                       <p className="mt-1 text-sm text-gray-500 leading-relaxed">
-                        Efficienter en sneller volumes afwerken heeft geen negatief effect op de aanbieders. Wie sneller
+                        Kortere en effectievere behandelingen hebben geen negatief effect op aanbieders. Wie sneller
                         en beter werkt, wordt beloond met meer volume, niet minder omzet.
                       </p>
                     </div>

@@ -1362,15 +1362,7 @@ export default function HomePage() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-white/80">Rol</label>
-                  <select className="mt-1 w-full rounded-lg bg-white/10 border border-white/20 px-4 py-2.5 text-sm text-white/70 focus:outline-none focus:ring-2 focus:ring-white/30">
-                    <option value="">Selecteer je rol</option>
-                    <option value="aanbieder">GGZ-aanbieder</option>
-                    <option value="gemeente">Gemeente / beleidsmaker</option>
-                    <option value="huisarts">Huisarts / verwijzer</option>
-                    <option value="professional">Zorgprofessional</option>
-                    <option value="onderzoeker">Onderzoeker</option>
-                    <option value="anders">Anders</option>
-                  </select>
+                  <input type="text" placeholder="Bijv. GGZ-aanbieder, beleidsmaker, huisarts..." className="mt-1 w-full rounded-lg bg-white/10 border border-white/20 px-4 py-2.5 text-sm text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-white/30" />
                 </div>
                 <button className="mt-2 w-full rounded-lg bg-white px-6 py-3 text-sm font-bold text-teal-700 shadow-lg hover:bg-teal-50 transition flex items-center justify-center gap-2">
                   <ArrowRight className="h-4 w-4" />
