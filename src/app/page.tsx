@@ -685,10 +685,10 @@ function StickyNav() {
   return (
     <nav
       ref={navRef}
-      className={`sticky top-16 z-30 border-b transition-all duration-200 ${
+      className={`sticky top-16 z-30 transition-all duration-200 ${
         isSticky
-          ? 'bg-white/95 backdrop-blur-md border-surface-200 shadow-sm'
-          : 'bg-white border-transparent'
+          ? 'bg-white/95 backdrop-blur-md border-b border-surface-200 shadow-sm'
+          : 'bg-white'
       }`}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
