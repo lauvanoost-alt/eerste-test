@@ -773,7 +773,7 @@ function DataStorySection() {
               document.getElementById('initiatieven')?.scrollIntoView({ behavior: 'smooth' });
             }}
           >
-            Bekijk de oplossing
+            Ontdek onze bijdrage aan een oplossing
             <ArrowRight className="h-4 w-4" />
           </a>
         </div>
