@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { useState, useRef, useEffect } from 'react';
 import { Menu, X, HeartPulse, ChevronDown } from 'lucide-react';
 import { siteConfig } from '@/config/site';
+import type { NavItem } from '@/config/site';
 
 /* ------------------------------------------------------------------ */
 /*  Dropdown component for grouped nav items                           */
@@ -27,7 +28,6 @@ function NavDropdown({
     item.href === '/' ? pathname === '/' : pathname.startsWith(item.href),
   );
 
-  // Close on click outside
   useEffect(() => {
     function handleClick(e: MouseEvent) {
       if (ref.current && !ref.current.contains(e.target as Node)) {
@@ -152,6 +152,64 @@ function MobileNavGroup({
 }
 
 /* ------------------------------------------------------------------ */
+/*  Render a single nav item (link or group)                           */
+/* ------------------------------------------------------------------ */
+
+function DesktopNavItem({ item, pathname }: { item: NavItem; pathname: string }) {
+  if (item.type === 'group') {
+    return <NavDropdown label={item.label} items={item.items} pathname={pathname} />;
+  }
+
+  const active = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
+  return (
+    <Link
+      href={item.href}
+      className={`rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+        active
+          ? 'bg-primary-50 text-primary-700'
+          : 'text-gray-600 hover:bg-surface-100 hover:text-foreground'
+      }`}
+    >
+      {item.label}
+    </Link>
+  );
+}
+
+function MobileNavItem({
+  item,
+  pathname,
+  onNavigate,
+}: {
+  item: NavItem;
+  pathname: string;
+  onNavigate: () => void;
+}) {
+  if (item.type === 'group') {
+    return (
+      <MobileNavGroup
+        label={item.label}
+        items={item.items}
+        pathname={pathname}
+        onNavigate={onNavigate}
+      />
+    );
+  }
+
+  const active = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
+  return (
+    <Link
+      href={item.href}
+      onClick={onNavigate}
+      className={`block rounded-md px-3 py-2.5 text-sm font-medium ${
+        active ? 'bg-primary-50 text-primary-700' : 'text-gray-600 hover:bg-surface-100'
+      }`}
+    >
+      {item.label}
+    </Link>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /*  Main Header                                                        */
 /* ------------------------------------------------------------------ */
 
@@ -168,31 +226,11 @@ export function Header() {
         </Link>
 
         {/* Desktop nav */}
-        <nav className="hidden items-center gap-1 lg:flex">
-          {/* Simple links */}
-          {siteConfig.navigation.map((item) => {
-            const active = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`rounded-md px-3 py-2 text-sm font-medium transition-colors ${
-                  active
-                    ? 'bg-primary-50 text-primary-700'
-                    : 'text-gray-600 hover:bg-surface-100 hover:text-foreground'
-                }`}
-              >
-                {item.label}
-              </Link>
-            );
-          })}
-
-          {/* Dropdown groups */}
-          {siteConfig.navigationGroups.map((group) => (
-            <NavDropdown
-              key={group.label}
-              label={group.label}
-              items={group.items}
+        <nav className="hidden items-center gap-0.5 lg:flex">
+          {siteConfig.navItems.map((item) => (
+            <DesktopNavItem
+              key={item.label}
+              item={item as NavItem}
               pathname={pathname}
             />
           ))}
@@ -219,29 +257,10 @@ export function Header() {
       {/* Mobile nav */}
       {mobileOpen && (
         <nav className="border-t border-surface-200 bg-white px-4 py-3 lg:hidden max-h-[80vh] overflow-y-auto">
-          {/* Simple links */}
-          {siteConfig.navigation.map((item) => {
-            const active = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setMobileOpen(false)}
-                className={`block rounded-md px-3 py-2.5 text-sm font-medium ${
-                  active ? 'bg-primary-50 text-primary-700' : 'text-gray-600 hover:bg-surface-100'
-                }`}
-              >
-                {item.label}
-              </Link>
-            );
-          })}
-
-          {/* Grouped nav with accordions */}
-          {siteConfig.navigationGroups.map((group) => (
-            <MobileNavGroup
-              key={group.label}
-              label={group.label}
-              items={group.items}
+          {siteConfig.navItems.map((item) => (
+            <MobileNavItem
+              key={item.label}
+              item={item as NavItem}
               pathname={pathname}
               onNavigate={() => setMobileOpen(false)}
             />
