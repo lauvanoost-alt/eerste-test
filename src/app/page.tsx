@@ -21,6 +21,10 @@ import {
   Stethoscope,
   Landmark,
   Sparkles,
+  AlertTriangle,
+  Target,
+  Zap,
+  GripVertical,
 } from 'lucide-react';
 
 /* ------------------------------------------------------------------ */
@@ -642,10 +646,255 @@ function CumulativeSavingsSection() {
 }
 
 /* ------------------------------------------------------------------ */
+/*  SCROLLYTELLING DATA STORY                                          */
+/* ------------------------------------------------------------------ */
+
+const storySteps = [
+  {
+    number: '€1,3 mrd',
+    label: 'Totale kosten jeugdzorg Nederland',
+    description: 'De uitgaven aan jeugd-GGZ zijn in 10 jaar met 132% gestegen. Gemeenten komen structureel geld tekort.',
+    icon: AlertTriangle,
+    color: 'from-red-500 to-orange-500',
+    bgGlow: 'bg-red-500',
+  },
+  {
+    number: '90%',
+    label: 'van gemeenten overschrijdt het jeugdzorgbudget',
+    description: 'Vrijwel elke gemeente kampt met tekorten. De huidige aanpak is onhoudbaar — niet voor gemeenten, niet voor aanbieders, niet voor jongeren.',
+    icon: Building2,
+    color: 'from-orange-500 to-amber-500',
+    bgGlow: 'bg-orange-500',
+  },
+  {
+    number: '15-20%',
+    label: 'volumereductie is haalbaar',
+    description: 'Onderzoek bij Bernhoven en Rivas toont aan: met de juiste aanpak kan 7-13% reductie in 2 jaar. Met 5 gecombineerde initiatieven is 15-20% realistisch.',
+    icon: Target,
+    color: 'from-emerald-500 to-teal-500',
+    bgGlow: 'bg-emerald-500',
+  },
+  {
+    number: '5',
+    label: 'bewezen initiatieven, 8 koplopers',
+    description: 'De kopgroep van 8 aanbieders in Zuid-Holland Zuid test 5 concrete interventies. Van overbruggingszorg tot kortdurende behandeling — samen goed voor €2,9 tot €3,8 mln besparing.',
+    icon: Zap,
+    color: 'from-primary-500 to-indigo-500',
+    bgGlow: 'bg-primary-500',
+  },
+];
+
+function DataStorySection() {
+  const [visibleSteps, setVisibleSteps] = useState<Set<number>>(new Set());
+  const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    const observers: IntersectionObserver[] = [];
+    stepRefs.current.forEach((ref, idx) => {
+      if (!ref) return;
+      const obs = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setVisibleSteps((prev) => new Set(prev).add(idx));
+            obs.disconnect();
+          }
+        },
+        { threshold: 0.3 }
+      );
+      obs.observe(ref);
+      observers.push(obs);
+    });
+    return () => observers.forEach((o) => o.disconnect());
+  }, []);
+
+  return (
+    <section id="het-probleem" className="scroll-mt-28 relative overflow-hidden bg-gradient-to-b from-slate-900 via-slate-800 to-indigo-900 py-20">
+      {/* Background decoration */}
+      <div className="absolute inset-0 opacity-20">
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-indigo-500 blur-[150px]" />
+      </div>
+
+      <div className="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-16">
+          <p className="text-sm font-semibold uppercase tracking-widest text-indigo-400">Waarom dit ertoe doet</p>
+          <h2 className="mt-3 text-3xl font-bold text-white sm:text-4xl">De jeugdzorg staat onder druk</h2>
+        </div>
+
+        {/* Vertical timeline */}
+        <div className="relative">
+          {/* Connecting line */}
+          <div className="absolute left-6 sm:left-8 top-0 bottom-0 w-px bg-gradient-to-b from-red-500/50 via-amber-500/50 to-emerald-500/50" />
+
+          <div className="space-y-12">
+            {storySteps.map((step, idx) => {
+              const isVisible = visibleSteps.has(idx);
+              const StepIcon = step.icon;
+              return (
+                <div
+                  key={idx}
+                  ref={(el) => { stepRefs.current[idx] = el; }}
+                  className="relative flex gap-6 sm:gap-8"
+                  style={{
+                    opacity: isVisible ? 1 : 0,
+                    transform: isVisible ? 'translateX(0)' : 'translateX(-40px)',
+                    transition: `opacity 0.8s ease ${idx * 0.1}s, transform 0.8s ease ${idx * 0.1}s`,
+                  }}
+                >
+                  {/* Node */}
+                  <div className="relative shrink-0">
+                    <div className={`w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br ${step.color} flex items-center justify-center shadow-lg`}>
+                      <StepIcon className="w-5 h-5 sm:w-7 sm:h-7 text-white" />
+                    </div>
+                    {/* Glow */}
+                    <div className={`absolute inset-0 ${step.bgGlow} rounded-full blur-xl opacity-30`} />
+                  </div>
+
+                  {/* Content */}
+                  <div className="flex-1 pt-1">
+                    <p className={`text-3xl sm:text-5xl font-extrabold bg-gradient-to-r ${step.color} bg-clip-text text-transparent leading-tight`}>
+                      {step.number}
+                    </p>
+                    <p className="mt-1 text-lg sm:text-xl font-semibold text-white/90">{step.label}</p>
+                    <p className="mt-2 text-sm sm:text-base text-slate-400 leading-relaxed max-w-lg">{step.description}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* CTA to scroll down */}
+        <div className="mt-16 text-center">
+          <a
+            href="#initiatieven"
+            className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 px-6 py-3 text-sm font-semibold text-white hover:bg-white/20 transition-all"
+            onClick={(e) => {
+              e.preventDefault();
+              document.getElementById('initiatieven')?.scrollIntoView({ behavior: 'smooth' });
+            }}
+          >
+            Bekijk de oplossing
+            <ArrowRight className="h-4 w-4" />
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  BEFORE/AFTER VEENDAM SLIDER                                        */
+/* ------------------------------------------------------------------ */
+
+function VeendamBeforeAfter() {
+  const [position, setPosition] = useState(50);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isDragging = useRef(false);
+
+  const updatePosition = useCallback((clientX: number) => {
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const x = Math.max(0, Math.min(clientX - rect.left, rect.width));
+    setPosition((x / rect.width) * 100);
+  }, []);
+
+  useEffect(() => {
+    const handleMove = (e: MouseEvent | TouchEvent) => {
+      if (!isDragging.current) return;
+      e.preventDefault();
+      const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+      updatePosition(clientX);
+    };
+    const handleUp = () => { isDragging.current = false; };
+
+    window.addEventListener('mousemove', handleMove);
+    window.addEventListener('mouseup', handleUp);
+    window.addEventListener('touchmove', handleMove, { passive: false });
+    window.addEventListener('touchend', handleUp);
+    return () => {
+      window.removeEventListener('mousemove', handleMove);
+      window.removeEventListener('mouseup', handleUp);
+      window.removeEventListener('touchmove', handleMove);
+      window.removeEventListener('touchend', handleUp);
+    };
+  }, [updatePosition]);
+
+  const beforeItems = [
+    { label: 'Aanbieders', value: '220', sub: 'gefragmenteerd veld' },
+    { label: 'Wachtlijsten', value: 'Maanden', sub: 'lange wachttijden' },
+    { label: 'Kosten', value: 'Stijgend', sub: 'boven budget' },
+    { label: 'Verwijzingen', value: '100%', sub: 'naar specialistische zorg' },
+  ];
+
+  const afterItems = [
+    { label: 'Aanbieders', value: '6', sub: 'in JEP-samenwerkingsverband' },
+    { label: 'Wachtlijsten', value: '0', sub: 'volledig verdwenen' },
+    { label: 'Kosten', value: '-13%', sub: 'kostenreductie' },
+    { label: 'Verwijzingen', value: '43%', sub: '57% voorkomen' },
+  ];
+
+  return (
+    <div
+      ref={containerRef}
+      className="relative overflow-hidden rounded-2xl border border-green-200 bg-white select-none touch-none"
+      style={{ height: 320 }}
+    >
+      {/* VOOR (left) */}
+      <div className="absolute inset-0 bg-gradient-to-br from-red-50 to-orange-50 p-6 sm:p-8">
+        <p className="text-xs font-bold uppercase tracking-widest text-red-400 mb-4">Voor</p>
+        <div className="space-y-4">
+          {beforeItems.map((item) => (
+            <div key={item.label}>
+              <div className="flex items-baseline gap-2">
+                <span className="text-2xl font-extrabold text-red-600">{item.value}</span>
+                <span className="text-sm font-semibold text-red-800">{item.label}</span>
+              </div>
+              <p className="text-xs text-red-400">{item.sub}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* NA (right) - clipped by position */}
+      <div
+        className="absolute inset-0 bg-gradient-to-br from-emerald-50 to-green-50 p-6 sm:p-8"
+        style={{ clipPath: `inset(0 0 0 ${position}%)` }}
+      >
+        <p className="text-xs font-bold uppercase tracking-widest text-emerald-400 mb-4">Na (2024)</p>
+        <div className="space-y-4">
+          {afterItems.map((item) => (
+            <div key={item.label}>
+              <div className="flex items-baseline gap-2">
+                <span className="text-2xl font-extrabold text-emerald-600">{item.value}</span>
+                <span className="text-sm font-semibold text-emerald-800">{item.label}</span>
+              </div>
+              <p className="text-xs text-emerald-400">{item.sub}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Slider handle */}
+      <div
+        className="absolute top-0 bottom-0 w-1 bg-white shadow-lg cursor-ew-resize z-10"
+        style={{ left: `${position}%`, transform: 'translateX(-50%)' }}
+        onMouseDown={() => { isDragging.current = true; }}
+        onTouchStart={() => { isDragging.current = true; }}
+      >
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white shadow-xl border-2 border-green-300 flex items-center justify-center">
+          <GripVertical className="w-4 h-4 text-green-600" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /*  STICKY SECTION NAV                                                 */
 /* ------------------------------------------------------------------ */
 
 const navSections = [
+  { id: 'het-probleem', label: 'Het Probleem' },
   { id: 'initiatieven', label: 'Initiatieven' },
   { id: 'clientpad', label: 'Cli\u00ebntpad' },
   { id: 'besparingspotentieel', label: 'Besparingen' },
@@ -796,6 +1045,9 @@ export default function HomePage() {
       {/* ============ STICKY SECTION NAV ============ */}
       <StickyNav />
 
+      {/* ============ SCROLLYTELLING DATA STORY ============ */}
+      <DataStorySection />
+
       {/* ============ INITIATIEVEN (SUMMARY CARDS) ============ */}
       <section id="initiatieven" className="scroll-mt-28 bg-white py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -861,7 +1113,7 @@ export default function HomePage() {
       {/* ============ CUMULATIEF BESPARINGSPOTENTIEEL ============ */}
       <CumulativeSavingsSection />
 
-      {/* ============ SUCCESVERHAAL VEENDAM (compact) ============ */}
+      {/* ============ SUCCESVERHAAL VEENDAM met Before/After ============ */}
       <section id="succesverhaal" className="scroll-mt-28 bg-gradient-to-br from-green-50 to-emerald-50 py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-start gap-3">
@@ -869,59 +1121,40 @@ export default function HomePage() {
             <div>
               <h2 className="text-2xl font-bold text-foreground sm:text-3xl">Succesverhaal: Gemeente Veendam</h2>
               <p className="mt-1 text-gray-500">
-                Fundamentele reorganisatie van de jeugdzorg met spectaculaire resultaten
+                Sleep de slider om het verschil te zien &mdash; van 220 aanbieders naar 6
               </p>
             </div>
           </div>
 
-          <div className="mt-8 grid gap-6 lg:grid-cols-5">
-            {/* Story - compact */}
-            <div className="lg:col-span-3 rounded-2xl bg-white border border-green-200 p-6">
-              <p className="text-sm text-gray-600 leading-relaxed">
-                Gemeente Veendam reduceerde 220 jeugdhulpaanbieders tot &eacute;&eacute;n samenwerkingsverband van 6 aanbieders
-                (JEP). Jongeren kunnen zonder wachttijd of indicatie terecht bij een professional op school of bij
-                de huisarts. Een wetenschappelijk geschoolde professional analyseert de situatie v&oacute;&oacute;rdat er wordt
-                ingegrepen.
-              </p>
-              <div className="mt-4 space-y-2">
-                {[
-                  'Wachtlijsten in 2,5 jaar volledig verdwenen',
-                  'Voor 57% van gezinnen doorverwijzing voorkomen',
-                  'Helft van cli\u00ebnten geholpen voor \u20AC600 i.p.v. \u20AC1.500',
-                  'Uithuisplaatsingen en crisisopvang afgenomen',
-                ].map((item) => (
-                  <div key={item} className="flex items-start gap-2">
-                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-green-500" />
-                    <span className="text-sm text-gray-600">{item}</span>
-                  </div>
-                ))}
-              </div>
-              <p className="mt-4 text-xs text-gray-400">
-                Bronnen: NRC (15/09/2025), Gemeente.nu (22/10/2025), Waarstaatjegemeente.nl (CBS)
-              </p>
-            </div>
+          <div className="mt-8 grid gap-6 lg:grid-cols-2">
+            {/* Before/After slider */}
+            <VeendamBeforeAfter />
 
-            {/* Impact metrics - compact 2x2 */}
-            <div className="lg:col-span-2 grid grid-cols-2 gap-3">
-              <div className="rounded-xl bg-white border border-green-200 p-4 text-center">
-                <TrendingDown className="mx-auto h-6 w-6 text-green-600" />
-                <p className="mt-1 text-2xl font-bold text-green-700">-13%</p>
-                <p className="text-xs text-green-600">kostenreductie &apos;18-&apos;24</p>
-              </div>
-              <div className="rounded-xl bg-white border border-green-200 p-4 text-center">
-                <Clock className="mx-auto h-6 w-6 text-green-600" />
-                <p className="mt-1 text-2xl font-bold text-green-700">0</p>
-                <p className="text-xs text-green-600">wachtlijsten</p>
-              </div>
-              <div className="rounded-xl bg-white border border-green-200 p-4 text-center">
-                <Users className="mx-auto h-6 w-6 text-green-600" />
-                <p className="mt-1 text-2xl font-bold text-green-700">57%</p>
-                <p className="text-xs text-green-600">verwijzingen voorkomen</p>
-              </div>
-              <div className="rounded-xl bg-white border border-green-200 p-4 text-center">
-                <Building2 className="mx-auto h-6 w-6 text-green-600" />
-                <p className="mt-1 text-2xl font-bold text-green-700">220&#8594;6</p>
-                <p className="text-xs text-green-600">aanbieders in JEP</p>
+            {/* Story + highlights */}
+            <div className="space-y-4">
+              <div className="rounded-2xl bg-white border border-green-200 p-6">
+                <p className="text-sm text-gray-600 leading-relaxed">
+                  Gemeente Veendam reduceerde 220 jeugdhulpaanbieders tot &eacute;&eacute;n samenwerkingsverband van 6 aanbieders
+                  (JEP). Jongeren kunnen zonder wachttijd of indicatie terecht bij een professional op school of bij
+                  de huisarts. Een wetenschappelijk geschoolde professional analyseert de situatie v&oacute;&oacute;rdat er wordt
+                  ingegrepen.
+                </p>
+                <div className="mt-4 space-y-2">
+                  {[
+                    'Wachtlijsten in 2,5 jaar volledig verdwenen',
+                    'Voor 57% van gezinnen doorverwijzing voorkomen',
+                    'Helft van cli\u00ebnten geholpen voor \u20AC600 i.p.v. \u20AC1.500',
+                    'Uithuisplaatsingen en crisisopvang afgenomen',
+                  ].map((item) => (
+                    <div key={item} className="flex items-start gap-2">
+                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-green-500" />
+                      <span className="text-sm text-gray-600">{item}</span>
+                    </div>
+                  ))}
+                </div>
+                <p className="mt-4 text-xs text-gray-400">
+                  Bronnen: NRC (15/09/2025), Gemeente.nu (22/10/2025), Waarstaatjegemeente.nl (CBS)
+                </p>
               </div>
             </div>
           </div>
@@ -1060,6 +1293,22 @@ export default function HomePage() {
           <div className="absolute -right-20 -bottom-10 h-64 w-64 rounded-full bg-teal-300 blur-3xl" />
         </div>
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          {/* Live counter strip */}
+          <div className="grid grid-cols-3 gap-4 mb-12 max-w-2xl mx-auto">
+            {[
+              { value: 8, label: 'Kopgroep-aanbieders', suffix: '' },
+              { value: 10, label: 'Gemeenten', suffix: '' },
+              { value: 25, label: 'Professionals', suffix: '+' },
+            ].map((counter) => (
+              <div key={counter.label} className="text-center rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 p-4">
+                <p className="text-3xl sm:text-4xl font-extrabold">
+                  {counter.value}{counter.suffix}
+                </p>
+                <p className="text-xs sm:text-sm text-white/70 mt-1">{counter.label}</p>
+              </div>
+            ))}
+          </div>
+
           <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
             <div>
               <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-1.5 text-sm font-semibold backdrop-blur-sm">

@@ -18,6 +18,7 @@ import {
   Clock,
   ChevronDown,
 } from 'lucide-react';
+import InteractiveTimeline from '@/components/InteractiveTimeline';
 
 export const metadata: Metadata = {
   title: 'Kwaliteit als Medicijn — Filosofie & Aanpak',
@@ -499,113 +500,11 @@ export default function KwaliteitAlsMedicijnPage() {
         </div>
         <p className="mt-4 text-gray-600 leading-relaxed">
           De transformatie van jeugd-GGZ kan alleen slagen als drie partijen stap voor stap
-          samen bewegen. Hieronder de tijdlijn van eind 2025 tot 2028:
+          samen bewegen. Klik op een stap voor meer context:
         </p>
 
-        {/* Legend */}
-        <div className="mt-6 flex flex-wrap gap-4">
-          <div className="flex items-center gap-2">
-            <span className="inline-block h-3 w-3 rounded-full bg-blue-600" />
-            <span className="text-sm font-medium text-gray-700">SOJ (Inkoper)</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="inline-block h-3 w-3 rounded-full bg-emerald-600" />
-            <span className="text-sm font-medium text-gray-700">Kopgroep (8 voorlopers)</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="inline-block h-3 w-3 rounded-full bg-amber-500" />
-            <span className="text-sm font-medium text-gray-700">Aanbieders</span>
-          </div>
-        </div>
-
-        {/* Timeline */}
-        <div className="relative mt-10">
-          {/* Startpunt label */}
-          <div className="mb-6 flex items-center gap-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-800 text-white">
-              <ChevronDown className="h-4 w-4" />
-            </div>
-            <span className="text-sm font-bold uppercase tracking-wider text-gray-500">
-              Startpunt — eind 2025
-            </span>
-          </div>
-
-          {/* Vertical connecting line */}
-          <div className="absolute left-4 top-14 bottom-24 w-0.5 bg-gradient-to-b from-blue-300 via-emerald-300 to-amber-300" />
-
-          {/* Timeline steps */}
-          <div className="space-y-0">
-            {timelineSteps.map((step, idx) => {
-              const isLeft = idx % 2 === 0;
-              return (
-                <div
-                  key={idx}
-                  className="relative pb-8 last:pb-0"
-                  style={{
-                    animation: `fadeSlideIn 0.5s ease-out ${idx * 0.1}s both`,
-                  }}
-                >
-                  {/* Dot on the line */}
-                  <div
-                    className={`absolute left-4 top-5 z-10 h-3.5 w-3.5 -translate-x-1/2 rounded-full ${step.colorClasses.dot} ring-4 ring-white`}
-                    style={{
-                      left: '1.0625rem',
-                    }}
-                  />
-
-                  {/* Card — zigzag with offset */}
-                  <div
-                    className={`ml-12 ${
-                      isLeft ? 'sm:mr-[25%]' : 'sm:ml-[25%]'
-                    }`}
-                  >
-                    <div
-                      className={`rounded-xl border ${step.colorClasses.card} p-5 shadow-sm transition-all duration-300 hover:shadow-md hover:-translate-y-0.5`}
-                    >
-                      {/* Header: badge + timing */}
-                      <div className="flex flex-wrap items-center gap-2">
-                        <span
-                          className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-bold ${step.colorClasses.badge}`}
-                        >
-                          {step.actor}
-                        </span>
-                        <span className="text-xs font-medium text-gray-400">{step.timing}</span>
-                      </div>
-
-                      {/* Description */}
-                      <p className={`mt-2 text-sm font-medium leading-relaxed ${step.colorClasses.text}`}>
-                        {step.description}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Eindpunt label */}
-          <div className="mt-6 flex items-center gap-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-800 text-white">
-              <CheckCircle2 className="h-4 w-4" />
-            </div>
-            <span className="text-sm font-bold uppercase tracking-wider text-gray-500">
-              Eindpunt — 2028
-            </span>
-          </div>
-        </div>
-
-        {/* Side annotation */}
-        <div className="mt-8 rounded-xl bg-gradient-to-r from-primary-50 to-amber-50 p-5 sm:p-6 border border-primary-100">
-          <div className="flex items-start gap-3">
-            <Sparkles className="mt-0.5 h-5 w-5 shrink-0 text-primary-600" />
-            <p className="text-sm leading-relaxed text-gray-700">
-              <strong className="text-foreground">Rode draad door het hele traject:</strong>{' '}
-              Door te anticiperen op de nieuwe opzet van contractering ontstaan nu al prikkels om
-              te werken aan passende zorg. Elke stap bouwt voort op de vorige — de cascade van
-              actie en reactie tussen SOJ, kopgroep en aanbieders creëert een onomkeerbare
-              beweging richting kwaliteitsgedreven jeugdzorg.
-            </p>
-          </div>
+        <div className="mt-6">
+          <InteractiveTimeline />
         </div>
       </section>
 
