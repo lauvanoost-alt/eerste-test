@@ -18,6 +18,10 @@ import {
   Users,
   Heart,
   Activity,
+  Shield,
+  Handshake,
+  ArrowRightLeft,
+  FileCheck2,
 } from 'lucide-react';
 
 /* ------------------------------------------------------------------ */
@@ -203,7 +207,7 @@ export default function DashboardPage() {
             Kwaliteit als Medicijn
           </h1>
           <p className="mt-3 text-lg text-indigo-100 max-w-2xl">
-            Impact dashboard — volg de voortgang van aanbieders, vergelijk prestaties en simuleer het effect van initiatieven op kosten, volume en kwaliteit.
+            Impact dashboard — volg de voortgang van aanbieders, vergelijk prestaties en bekijk de impact van initiatieven op volume en kwaliteit.
           </p>
           <div className="flex flex-wrap gap-4 mt-8">
             <span className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm rounded-full px-4 py-1.5 text-sm font-medium"><Building2 size={16} /> 8 Kopgroep Aanbieders</span>
@@ -359,6 +363,108 @@ export default function DashboardPage() {
                 </div>
               );
             })}
+          </div>
+        </section>
+
+        {/* ============================================================ */}
+        {/*  SECTION — OMZETBESCHERMING                                  */}
+        {/* ============================================================ */}
+        <section>
+          <div className="flex items-center gap-2 mb-6">
+            <Shield size={24} className="text-emerald-600" />
+            <h2 className="text-2xl font-bold text-gray-900">Omzetbescherming voor Aanbieders</h2>
+          </div>
+
+          <div className="rounded-2xl bg-gradient-to-br from-emerald-50 via-white to-teal-50 shadow-md border border-emerald-100 overflow-hidden">
+            {/* Header banner */}
+            <div className="bg-gradient-to-r from-emerald-600 to-teal-600 px-6 py-4 text-white">
+              <p className="text-sm font-medium text-emerald-100">Wachtlijstbemiddeling &amp; Volumeherverdeling</p>
+              <p className="mt-1 text-lg font-bold">Efficienter werken zonder omzetverlies</p>
+            </div>
+
+            <div className="p-6 sm:p-8">
+              <p className="text-sm text-gray-600 leading-relaxed max-w-3xl mb-8">
+                Aanbieders die vooroplopen in kwaliteitsverbetering mogen daar niet financieel voor gestraft worden.
+                Via wachtlijstbemiddeling en volumeherverdeling wordt ervoor gezorgd dat koplopers hun omzet behouden
+                of zelfs versterken terwijl zij bijdragen aan passendere, kortere en effectievere zorg.
+              </p>
+
+              <div className="grid gap-5 sm:grid-cols-2">
+                {/* Card 1 */}
+                <div className="rounded-xl bg-white border border-emerald-100 p-5 shadow-sm hover:shadow-md transition-shadow">
+                  <div className="flex items-start gap-3">
+                    <span className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 shrink-0">
+                      <Handshake size={20} />
+                    </span>
+                    <div>
+                      <h4 className="font-semibold text-gray-900 text-sm">Wachtlijstbemiddeling &amp; Extra Volume</h4>
+                      <p className="mt-1 text-sm text-gray-500 leading-relaxed">
+                        Door wachtlijstbemiddeling en het toewijzen van extra volume wordt ervoor gezorgd dat de omzet
+                        van aanbieders niet wordt geraakt wanneer trajecten korter worden.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Card 2 */}
+                <div className="rounded-xl bg-white border border-emerald-100 p-5 shadow-sm hover:shadow-md transition-shadow">
+                  <div className="flex items-start gap-3">
+                    <span className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-teal-100 text-teal-600 shrink-0">
+                      <Zap size={20} />
+                    </span>
+                    <div>
+                      <h4 className="font-semibold text-gray-900 text-sm">Geen Negatief Effect op Aanbieders</h4>
+                      <p className="mt-1 text-sm text-gray-500 leading-relaxed">
+                        Efficienter en sneller volumes afwerken heeft geen negatief effect op de aanbieders. Wie sneller
+                        en beter werkt, wordt beloond met meer volume, niet minder omzet.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Card 3 */}
+                <div className="rounded-xl bg-white border border-emerald-100 p-5 shadow-sm hover:shadow-md transition-shadow">
+                  <div className="flex items-start gap-3">
+                    <span className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-sky-100 text-sky-600 shrink-0">
+                      <FileCheck2 size={20} />
+                    </span>
+                    <div>
+                      <h4 className="font-semibold text-gray-900 text-sm">Contractuele Borging</h4>
+                      <p className="mt-1 text-sm text-gray-500 leading-relaxed">
+                        Contractueel borgen dat aanbieders die koploper zijn niet worden benadeeld wanneer trajecten
+                        korter en doelmatiger worden. Koplopers krijgen zekerheid.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Card 4 */}
+                <div className="rounded-xl bg-white border border-emerald-100 p-5 shadow-sm hover:shadow-md transition-shadow">
+                  <div className="flex items-start gap-3">
+                    <span className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-purple-100 text-purple-600 shrink-0">
+                      <ArrowRightLeft size={20} />
+                    </span>
+                    <div>
+                      <h4 className="font-semibold text-gray-900 text-sm">Aangepaste Toewijzing &amp; Herverdeling</h4>
+                      <p className="mt-1 text-sm text-gray-500 leading-relaxed">
+                        Dit gebeurt via aangepaste toewijzingsafspraken of volumeherverdeling, zodat vrijgekomen
+                        capaciteit direct wordt benut voor wachtende jeugdigen.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Summary callout */}
+              <div className="mt-6 rounded-xl bg-emerald-50 border border-emerald-200 p-4 flex items-start gap-3">
+                <Shield size={20} className="text-emerald-600 shrink-0 mt-0.5" />
+                <p className="text-sm text-emerald-800 leading-relaxed">
+                  <strong>Kernprincipe:</strong> Aanbieders die investeren in kwaliteit en efficiency worden beschermd
+                  via volumeherverdeling. Kortere trajecten leiden niet tot minder omzet maar tot meer ruimte voor
+                  wachtende jeugdigen &mdash; een win-win voor aanbieder en regio.
+                </p>
+              </div>
+            </div>
           </div>
         </section>
 

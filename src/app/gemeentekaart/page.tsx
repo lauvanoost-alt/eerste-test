@@ -226,52 +226,62 @@ function savingsEuro(m: Municipality): string {
 /* ------------------------------------------------------------------ */
 
 // Geographically accurate polygon paths for each municipality (viewBox 0 0 800 600)
-// Layout: Rivers run west-east. Oude Maas in north, Noord runs N-S near Dordrecht,
-// Beneden Merwede runs W-E from Papendrecht area eastward.
+// Hoeksche Waard = large island SW; Drechtsteden cluster in center; Molenlanden = large area north.
+// Rivers (not drawn) separate the island clusters.
 const municipalityShapes: Record<number, string> = {
-  // Hoeksche Waard - LARGE island, FAR WEST, south of Oude Maas
-  10: 'M 15,195 L 55,165 L 120,148 L 200,140 L 270,148 L 295,170 L 290,210 L 295,260 L 280,330 L 240,390 L 170,415 L 95,405 L 40,370 L 18,310 L 12,255 Z',
+  // Hoeksche Waard (id 10) - Very large broad island, southwest quadrant
+  // center ~(144,432), width ~256px, height ~144px, neck toward Dordrecht upper-right
+  10: 'M 22,396 C 30,378 52,364 82,356 C 110,348 136,346 164,350 C 190,354 214,350 238,344 C 258,338 276,336 292,340 C 308,346 318,356 322,372 C 326,388 322,406 314,422 C 304,438 290,452 272,464 C 256,474 238,482 218,488 C 196,494 174,498 152,498 C 128,496 106,490 86,480 C 66,468 48,454 36,438 C 26,424 20,412 20,400 C 20,396 20,394 22,396 Z',
 
-  // Zwijndrecht - north bank, directly north of Dordrecht, small
-  2: 'M 305,60 L 350,48 L 395,55 L 400,82 L 392,108 L 355,118 L 318,112 L 305,90 Z',
+  // Dordrecht (id 1) - Large compact pear/teardrop, wider at bottom
+  // center ~(384,372), south of Zwijndrecht, connects east
+  1: 'M 348,340 C 358,332 370,328 384,326 C 400,324 414,328 426,336 C 436,346 440,360 440,376 C 440,392 436,406 428,416 C 418,426 406,432 392,434 C 378,436 364,432 352,424 C 342,414 336,402 332,388 C 328,374 332,358 340,346 C 344,342 346,340 348,340 Z',
 
-  // Hendrik-Ido-Ambacht - immediately east of Zwijndrecht, north bank, small
-  3: 'M 395,55 L 440,45 L 480,58 L 482,85 L 472,110 L 435,118 L 392,108 L 400,82 Z',
+  // Zwijndrecht (id 2) - Small-medium, rounded triangular/droplet
+  // center ~(352,288), between HIA (northwest) and Dordrecht (south)
+  2: 'M 322,276 C 330,264 342,258 356,256 C 370,256 384,262 392,272 C 398,282 398,294 394,306 C 388,316 378,324 366,326 C 354,328 342,326 332,318 C 324,310 320,298 320,290 C 320,284 320,280 322,276 Z',
 
-  // Alblasserdam - immediately east of HIA, north bank, small
-  6: 'M 480,58 L 525,48 L 558,62 L 558,90 L 548,112 L 510,118 L 472,110 L 482,85 Z',
+  // Hendrik-Ido-Ambacht (id 3) - Small, short horizontal rounded rectangle
+  // center ~(320,240)
+  3: 'M 290,230 C 298,222 312,218 326,218 C 340,218 354,222 362,230 C 368,238 368,246 364,254 C 358,262 348,268 336,270 C 324,272 310,270 300,264 C 290,258 284,248 284,240 C 284,236 286,232 290,230 Z',
 
-  // Dordrecht - central, south of Zwijndrecht, on island between rivers
-  1: 'M 300,155 L 335,140 L 380,142 L 405,160 L 410,195 L 400,230 L 375,252 L 345,260 L 310,250 L 295,215 Z',
+  // Alblasserdam (id 6) - Very small, narrow horizontal strip
+  // center ~(368,204)
+  6: 'M 342,196 C 350,190 360,188 372,188 C 384,188 394,190 402,196 C 408,202 408,210 404,216 C 398,222 388,226 376,226 C 364,226 352,222 346,216 C 340,210 338,202 342,196 Z',
 
-  // Papendrecht - east of Dordrecht, between Noord and Beneden Merwede, small-medium
-  4: 'M 415,155 L 455,140 L 505,145 L 528,165 L 528,200 L 510,225 L 468,232 L 432,222 L 415,200 Z',
+  // Papendrecht (id 4) - Medium, broad horizontal block
+  // center ~(440,240), connects toward Sliedrecht east
+  4: 'M 402,226 C 412,218 426,214 442,212 C 458,212 474,216 484,224 C 492,232 494,244 490,254 C 486,264 478,272 466,276 C 454,280 440,280 428,278 C 416,274 406,266 402,256 C 398,246 398,236 402,226 Z',
 
-  // Sliedrecht - east of Papendrecht, elongated along south bank of Beneden Merwede
-  5: 'M 535,155 L 585,142 L 635,148 L 645,175 L 638,210 L 598,222 L 555,218 L 535,195 Z',
+  // Sliedrecht (id 5) - Medium, elongated horizontal segment
+  // center ~(536,246)
+  5: 'M 496,234 C 506,226 522,222 540,220 C 558,220 574,224 584,234 C 590,242 590,252 586,260 C 580,268 570,274 556,276 C 542,278 526,278 512,274 C 500,270 492,262 490,254 C 488,246 490,238 496,234 Z',
 
-  // Hardinxveld-Giessendam - east of Sliedrecht, narrow elongated strip along river
-  9: 'M 645,148 L 695,135 L 732,145 L 735,170 L 728,200 L 690,210 L 650,205 L 638,210 L 645,175 Z',
+  // Hardinxveld-Giessendam (id 9) - Medium, narrow curved horizontal ribbon
+  // center ~(632,252)
+  9: 'M 592,242 C 602,234 618,230 636,228 C 654,228 670,232 680,240 C 688,248 688,258 684,266 C 678,274 668,280 654,282 C 640,284 624,284 610,280 C 598,276 590,268 588,260 C 586,252 588,246 592,242 Z',
 
-  // Gorinchem - far east, compact urban area at confluence
-  7: 'M 738,140 L 770,132 L 790,155 L 792,200 L 778,235 L 748,248 L 725,238 L 720,205 L 728,200 L 735,170 Z',
+  // Gorinchem (id 7) - Small-medium, compact rounded polygon at eastern end
+  // center ~(736,258)
+  7: 'M 712,242 C 720,232 732,226 744,226 C 756,226 766,232 772,242 C 778,252 780,264 776,276 C 772,286 764,294 752,298 C 740,300 728,296 720,288 C 712,278 708,266 710,254 C 710,248 712,244 712,242 Z',
 
-  // Molenlanden - VERY LARGE rural area, south of Beneden Merwede, from below Dordrecht east to below Gorinchem
-  8: 'M 375,252 L 400,230 L 432,222 L 468,232 L 510,225 L 555,218 L 598,222 L 638,210 L 690,210 L 728,200 L 720,205 L 725,238 L 748,248 L 740,310 L 710,380 L 650,440 L 560,470 L 465,460 L 390,425 L 360,365 L 345,260 Z',
+  // Molenlanden (id 8) - LARGEST municipality, broad region above central chain
+  // spans x=360..784, y=48..192, undulating top border, diagonal lower border
+  8: 'M 362,186 C 368,172 380,160 396,150 C 414,140 434,130 458,122 C 482,114 508,104 536,94 C 562,84 588,74 614,66 C 640,58 666,52 692,50 C 716,48 738,50 758,56 C 774,62 786,72 790,86 C 794,100 792,116 788,134 C 784,150 778,166 770,180 C 762,192 752,202 740,210 C 728,218 714,222 698,226 C 682,230 666,232 648,232 C 630,232 612,230 596,228 C 578,226 562,224 546,224 C 530,226 514,230 498,236 C 482,242 466,248 450,254 C 436,260 422,264 410,264 C 398,262 388,256 380,244 C 372,232 366,216 364,200 C 362,194 362,190 362,186 Z',
 };
 
 // Approximate label centers for each municipality shape
 const labelPositions: Record<number, { x: number; y: number }> = {
-  10: { x: 155, y: 280 }, // Hoeksche Waard
-  2: { x: 350, y: 85 },   // Zwijndrecht
-  3: { x: 438, y: 82 },   // Hendrik-Ido-Ambacht
-  6: { x: 518, y: 82 },   // Alblasserdam
-  1: { x: 355, y: 200 },  // Dordrecht
-  4: { x: 472, y: 190 },  // Papendrecht
-  5: { x: 588, y: 182 },  // Sliedrecht
-  9: { x: 688, y: 175 },  // Hardinxveld-Giessendam
-  7: { x: 758, y: 192 },  // Gorinchem
-  8: { x: 555, y: 360 },  // Molenlanden
+  10: { x: 168, y: 432 }, // Hoeksche Waard
+  1: { x: 384, y: 378 },  // Dordrecht
+  2: { x: 356, y: 290 },  // Zwijndrecht
+  3: { x: 324, y: 244 },  // Hendrik-Ido-Ambacht
+  6: { x: 372, y: 207 },  // Alblasserdam
+  4: { x: 444, y: 246 },  // Papendrecht
+  5: { x: 538, y: 250 },  // Sliedrecht
+  9: { x: 636, y: 256 },  // Hardinxveld-Giessendam
+  7: { x: 742, y: 262 },  // Gorinchem
+  8: { x: 580, y: 140 },  // Molenlanden
 };
 
 /* ------------------------------------------------------------------ */
@@ -648,36 +658,6 @@ export default function GemeentekaartPage() {
                   {/* Background */}
                   <rect width="800" height="600" fill="#f8fafc" rx="8" />
 
-                  {/* River: Oude Maas - runs west-east between Hoeksche Waard (south) and Zwijndrecht/HIA/Alblasserdam (north) */}
-                  <path
-                    d="M 10,138 C 80,132 160,128 250,132 S 320,138 370,135 S 430,130 500,134 S 560,128 570,126"
-                    stroke="#93c5fd"
-                    strokeWidth="5"
-                    fill="none"
-                    opacity="0.5"
-                    strokeLinecap="round"
-                  />
-
-                  {/* River: Noord - runs north-south connecting Oude Maas to Beneden Merwede near Dordrecht */}
-                  <path
-                    d="M 370,135 C 380,142 390,148 400,155"
-                    stroke="#93c5fd"
-                    strokeWidth="5"
-                    fill="none"
-                    opacity="0.5"
-                    strokeLinecap="round"
-                  />
-
-                  {/* River: Beneden Merwede - runs west-east from Dordrecht/Papendrecht area eastward past Sliedrecht, Hardinxveld, to Gorinchem */}
-                  <path
-                    d="M 405,155 C 450,140 510,138 560,142 S 620,148 670,142 S 720,138 760,140"
-                    stroke="#93c5fd"
-                    strokeWidth="5"
-                    fill="none"
-                    opacity="0.5"
-                    strokeLinecap="round"
-                  />
-
                   {/* Municipality polygons */}
                   {municipalities.map((m) => {
                     const shapePath = municipalityShapes[m.id];
@@ -750,37 +730,6 @@ export default function GemeentekaartPage() {
                     );
                   })}
 
-                  {/* River labels */}
-                  <text
-                    x="120"
-                    y="125"
-                    className="text-[9px] italic"
-                    fill="#93c5fd"
-                    opacity="0.8"
-                    style={{ pointerEvents: 'none' }}
-                  >
-                    Oude Maas
-                  </text>
-                  <text
-                    x="378"
-                    y="150"
-                    className="text-[9px] italic"
-                    fill="#93c5fd"
-                    opacity="0.7"
-                    style={{ pointerEvents: 'none' }}
-                  >
-                    Noord
-                  </text>
-                  <text
-                    x="580"
-                    y="135"
-                    className="text-[9px] italic"
-                    fill="#93c5fd"
-                    opacity="0.8"
-                    style={{ pointerEvents: 'none' }}
-                  >
-                    Beneden Merwede
-                  </text>
                 </svg>
               </div>
 

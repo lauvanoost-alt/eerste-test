@@ -13,6 +13,7 @@ export const siteConfig = {
     { label: 'Gemeentekaart', href: '/gemeentekaart' },
     { label: 'Kwaliteit als Medicijn', href: '/kwaliteit-als-medicijn' },
     { label: 'Community', href: '/community' },
+    { label: 'Blog', href: '/blog' },
     { label: 'Quiz', href: '/quiz' },
     { label: 'Organisaties', href: '/organisaties' },
   ],

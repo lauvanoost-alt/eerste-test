@@ -1,3 +1,6 @@
+'use client';
+
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import {
   TrendingUp,
@@ -23,6 +26,11 @@ import {
   BarChart3,
   Layers,
   ChevronRight,
+  Footprints,
+  Info,
+  TrendingUp as TrendUp,
+  Stethoscope,
+  Landmark,
 } from 'lucide-react';
 
 const initiatieven = [
@@ -126,6 +134,419 @@ const colorMap: Record<string, { bg: string; border: string; text: string; badge
   orange: { bg: 'bg-orange-50', border: 'border-orange-200', text: 'text-orange-800', badge: 'bg-orange-100 text-orange-700' },
 };
 
+/* ------------------------------------------------------------------ */
+/*  CLIENT JOURNEY SECTION                                             */
+/* ------------------------------------------------------------------ */
+
+const journeyStages = [
+  {
+    id: 1,
+    label: 'Jeugdige nog niet in beeld',
+    short: 'Nog niet in beeld',
+    initiatives: [] as { num: number; title: string; provider: string; effect: string; saving: string; color: string }[],
+  },
+  {
+    id: 2,
+    label: 'Tussen verwijzing en intake (wachtlijst)',
+    short: 'Wachtlijst',
+    initiatives: [
+      {
+        num: 1,
+        title: 'The Bridge / Overbruggingszorg',
+        provider: 'De Hoop',
+        effect: '20% ziet af SGGZ, 40% naar BGGZ',
+        saving: '~\u20AC2,0 mln (~11%)',
+        color: 'sky',
+      },
+    ],
+  },
+  {
+    id: 3,
+    label: 'Intake & plan van aanpak',
+    short: 'Intake',
+    initiatives: [
+      {
+        num: 2,
+        title: 'Brede Intake',
+        provider: 'Parnassia',
+        effect: '40% naar BGGZ/wijkteam',
+        saving: '~\u20AC2,5 mln (~14%)',
+        color: 'violet',
+      },
+    ],
+  },
+  {
+    id: 4,
+    label: 'Behandeltraject',
+    short: 'Behandeling',
+    initiatives: [
+      {
+        num: 3,
+        title: 'Kracht van Kort',
+        provider: 'Perspectief & Eleos',
+        effect: '10-20% behandelverkorting',
+        saving: '~\u20AC1,8-3,6 mln (~10-20%)',
+        color: 'amber',
+      },
+      {
+        num: 4,
+        title: 'Gezinsgerichte Aanpak',
+        provider: 'FamilySupporters & NeuroScan',
+        effect: 'Integraal gezinsperspectief',
+        saving: 'Niet gekwantificeerd',
+        color: 'teal',
+      },
+    ],
+  },
+  {
+    id: 5,
+    label: 'Afronding en nazorg',
+    short: 'Afronding',
+    initiatives: [
+      {
+        num: 5,
+        title: 'Integraal Zorgaanbod',
+        provider: 'CareHouse',
+        effect: 'Behandeling + begeleiding parallel',
+        saving: 'Niet gekwantificeerd',
+        color: 'orange',
+      },
+    ],
+  },
+];
+
+const initiativeColorMap: Record<string, { bg: string; border: string; text: string; dot: string }> = {
+  sky:    { bg: 'bg-sky-50',    border: 'border-sky-300',    text: 'text-sky-800',    dot: 'bg-sky-400'    },
+  violet: { bg: 'bg-violet-50', border: 'border-violet-300', text: 'text-violet-800', dot: 'bg-violet-400' },
+  amber:  { bg: 'bg-amber-50',  border: 'border-amber-300',  text: 'text-amber-800',  dot: 'bg-amber-400'  },
+  teal:   { bg: 'bg-teal-50',   border: 'border-teal-300',   text: 'text-teal-800',   dot: 'bg-teal-400'   },
+  orange: { bg: 'bg-orange-50', border: 'border-orange-300', text: 'text-orange-800', dot: 'bg-orange-400' },
+};
+
+function ClientJourneySection() {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.15 }
+    );
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <section ref={sectionRef} id="clientpad" className="scroll-mt-20 bg-white py-16 overflow-hidden">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex items-start gap-3">
+          <Footprints className="mt-1 h-7 w-7 shrink-0 text-primary-600" />
+          <div>
+            <h2 className="text-2xl font-bold text-foreground sm:text-3xl">Het Cli&euml;ntpad</h2>
+            <p className="mt-1 text-gray-500">
+              Van eerste signaal tot nazorg &mdash; waar grijpen de initiatieven aan?
+            </p>
+          </div>
+        </div>
+
+        {/* Journey stages - horizontal */}
+        <div className="mt-10 relative">
+          {/* Connecting line */}
+          <div className="hidden lg:block absolute top-[38px] left-[10%] right-[10%] h-1 bg-gradient-to-r from-primary-200 via-primary-400 to-primary-200 rounded-full z-0" />
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 relative z-10">
+            {journeyStages.map((stage, idx) => (
+              <div
+                key={stage.id}
+                className="flex flex-col items-center"
+                style={{
+                  opacity: visible ? 1 : 0,
+                  transform: visible ? 'translateY(0)' : 'translateY(30px)',
+                  transition: `opacity 0.6s ease ${idx * 0.15}s, transform 0.6s ease ${idx * 0.15}s`,
+                }}
+              >
+                {/* Node */}
+                <div className="relative flex items-center justify-center w-[76px] h-[76px] rounded-full bg-gradient-to-br from-primary-600 to-primary-700 text-white shadow-lg shadow-primary-200">
+                  <span className="text-xl font-extrabold">{stage.id}</span>
+                  {idx < journeyStages.length - 1 && (
+                    <ChevronRight className="hidden lg:block absolute -right-5 h-5 w-5 text-primary-400" />
+                  )}
+                </div>
+
+                {/* Label */}
+                <p className="mt-3 text-center text-sm font-semibold text-gray-800 leading-tight max-w-[160px]">
+                  {stage.short}
+                </p>
+                <p className="text-center text-xs text-gray-400 leading-tight mt-0.5 max-w-[180px]">
+                  {stage.label}
+                </p>
+
+                {/* Initiative cards popping in */}
+                <div className="mt-4 space-y-3 w-full">
+                  {stage.initiatives.map((init, iIdx) => {
+                    const ic = initiativeColorMap[init.color] || initiativeColorMap.sky;
+                    return (
+                      <div
+                        key={init.num}
+                        className={`rounded-xl border-2 ${ic.border} ${ic.bg} p-3 shadow-sm`}
+                        style={{
+                          opacity: visible ? 1 : 0,
+                          transform: visible ? 'scale(1)' : 'scale(0.85)',
+                          transition: `opacity 0.5s ease ${idx * 0.15 + 0.4 + iIdx * 0.15}s, transform 0.5s ease ${idx * 0.15 + 0.4 + iIdx * 0.15}s`,
+                        }}
+                      >
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className={`w-2.5 h-2.5 rounded-full ${ic.dot}`} />
+                          <span className={`text-xs font-bold ${ic.text}`}>Initiatief {init.num}</span>
+                        </div>
+                        <p className={`text-sm font-semibold ${ic.text} leading-tight`}>{init.title}</p>
+                        <p className="text-xs text-gray-500 mt-1">{init.provider}</p>
+                        <p className="text-xs text-gray-600 mt-1.5 leading-relaxed">{init.effect}</p>
+                        <p className={`text-xs font-bold ${ic.text} mt-1`}>{init.saving}</p>
+                      </div>
+                    );
+                  })}
+                  {stage.initiatives.length === 0 && (
+                    <div
+                      className="rounded-xl border border-dashed border-gray-300 bg-gray-50 p-3 text-center"
+                      style={{
+                        opacity: visible ? 1 : 0,
+                        transition: `opacity 0.5s ease ${idx * 0.15 + 0.4}s`,
+                      }}
+                    >
+                      <p className="text-xs text-gray-400 italic">Nog geen KAM-interventie in dit stadium</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Bottom summary */}
+        <div
+          className="mt-10 rounded-2xl bg-gradient-to-r from-primary-700 to-primary-800 p-5 text-white text-center"
+          style={{
+            opacity: visible ? 1 : 0,
+            transform: visible ? 'translateY(0)' : 'translateY(20px)',
+            transition: 'opacity 0.6s ease 1.2s, transform 0.6s ease 1.2s',
+          }}
+        >
+          <p className="text-sm text-primary-200">Totaal besparingspotentieel gecorrigeerd voor overlap</p>
+          <p className="mt-1 text-2xl sm:text-3xl font-bold">&euro;2,9 - &euro;3,8 mln (~15-20%)</p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  CUMULATIVE SAVINGS SECTION                                         */
+/* ------------------------------------------------------------------ */
+
+const savingsData = {
+  years: ['2025', '2026', '2027', '2028', '2029'],
+  // Scenario 1: Historical growth continues (~5% per year on base of ~18M)
+  historicalGrowth: [18.0, 18.9, 19.8, 20.8, 21.8],
+  historicalWithKAM: [18.0, 18.1, 17.8, 17.5, 17.4],
+  // Scenario 2: Growth levels off
+  autonomeGroei: [18.0, 18.5, 18.8, 19.0, 19.1],
+  autonomeWithKAM: [18.0, 17.8, 17.0, 16.2, 15.3],
+  // Cumulative savings for display
+  cumulativeSavingsHistorical: [0.0, 0.8, 2.8, 6.1, 10.5],
+  cumulativeSavingsAutonome: [0.0, 0.7, 2.5, 5.3, 9.1],
+};
+
+function CumulativeSavingsSection() {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+  const [activeScenario, setActiveScenario] = useState<'historical' | 'autonome'>('historical');
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.15 }
+    );
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  const baseline = activeScenario === 'historical' ? savingsData.historicalGrowth : savingsData.autonomeGroei;
+  const withKAM = activeScenario === 'historical' ? savingsData.historicalWithKAM : savingsData.autonomeWithKAM;
+  const cumulative = activeScenario === 'historical' ? savingsData.cumulativeSavingsHistorical : savingsData.cumulativeSavingsAutonome;
+  const maxVal = Math.max(...baseline) + 1;
+
+  return (
+    <section ref={sectionRef} id="besparingspotentieel" className="scroll-mt-20 bg-surface-50 py-16">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex items-start gap-3">
+          <BarChart3 className="mt-1 h-7 w-7 shrink-0 text-primary-600" />
+          <div>
+            <h2 className="text-2xl font-bold text-foreground sm:text-3xl">Cumulatief Besparingspotentieel</h2>
+            <p className="mt-1 text-gray-500">
+              Projectie 2025&ndash;2029 &mdash; interessant voor wethouders en beleidsmakers
+            </p>
+          </div>
+        </div>
+
+        {/* Scenario toggle */}
+        <div className="mt-8 flex flex-col sm:flex-row gap-3">
+          <button
+            onClick={() => setActiveScenario('historical')}
+            className={`flex-1 rounded-xl p-4 border-2 transition-all text-left ${
+              activeScenario === 'historical'
+                ? 'border-red-400 bg-red-50 shadow-md'
+                : 'border-gray-200 bg-white hover:border-red-200'
+            }`}
+          >
+            <div className="flex items-center gap-2">
+              <TrendingUp className={`h-5 w-5 ${activeScenario === 'historical' ? 'text-red-500' : 'text-gray-400'}`} />
+              <span className={`font-semibold text-sm ${activeScenario === 'historical' ? 'text-red-800' : 'text-gray-700'}`}>
+                Scenario 1: Historische groei zet door
+              </span>
+            </div>
+            <p className="mt-1 text-xs text-gray-500">Kosten blijven stijgen met ~5% per jaar</p>
+          </button>
+          <button
+            onClick={() => setActiveScenario('autonome')}
+            className={`flex-1 rounded-xl p-4 border-2 transition-all text-left ${
+              activeScenario === 'autonome'
+                ? 'border-amber-400 bg-amber-50 shadow-md'
+                : 'border-gray-200 bg-white hover:border-amber-200'
+            }`}
+          >
+            <div className="flex items-center gap-2">
+              <TrendingUp className={`h-5 w-5 ${activeScenario === 'autonome' ? 'text-amber-500' : 'text-gray-400'}`} />
+              <span className={`font-semibold text-sm ${activeScenario === 'autonome' ? 'text-amber-800' : 'text-gray-700'}`}>
+                Scenario 2: Autonome groei stabiliseert
+              </span>
+            </div>
+            <p className="mt-1 text-xs text-gray-500">Groei vlakt af richting 0%</p>
+          </button>
+        </div>
+
+        {/* Chart area */}
+        <div className="mt-8 rounded-2xl bg-white border border-surface-200 p-6 sm:p-8 shadow-md">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+            <div>
+              <h3 className="text-lg font-semibold text-foreground">
+                Jeugd-GGZ kosten ZHZ (&euro;mln)
+              </h3>
+              <p className="text-xs text-gray-400 mt-1">Basis: ~&euro;18 mln huidig, KAM-interventies 15-20% reductie opbouwend over 3 jaar</p>
+            </div>
+            <div className="flex gap-4 text-xs">
+              <div className="flex items-center gap-2">
+                <span className={`w-3 h-3 rounded-sm ${activeScenario === 'historical' ? 'bg-red-400' : 'bg-amber-400'}`} />
+                <span className="text-gray-600">Zonder KAM</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="w-3 h-3 rounded-sm bg-emerald-500" />
+                <span className="text-gray-600">Met KAM</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Bar chart */}
+          <div className="flex items-end gap-4 sm:gap-6 h-64 sm:h-72">
+            {savingsData.years.map((year, idx) => {
+              const baseHeight = (baseline[idx] / maxVal) * 100;
+              const kamHeight = (withKAM[idx] / maxVal) * 100;
+              const saving = baseline[idx] - withKAM[idx];
+              const baseColor = activeScenario === 'historical' ? 'bg-red-300' : 'bg-amber-300';
+              return (
+                <div key={year} className="flex flex-col items-center flex-1 gap-1">
+                  {/* Values */}
+                  <div className="text-center mb-1">
+                    {saving > 0.05 && (
+                      <span className="text-xs font-bold text-emerald-600 block">
+                        -&euro;{saving.toFixed(1)}M
+                      </span>
+                    )}
+                  </div>
+                  {/* Bars */}
+                  <div className="w-full flex items-end justify-center gap-1" style={{ height: '200px' }}>
+                    {/* Baseline bar */}
+                    <div
+                      className={`w-full max-w-[28px] rounded-t-md ${baseColor} relative`}
+                      style={{
+                        height: visible ? `${baseHeight}%` : '0%',
+                        transition: `height 1s cubic-bezier(0.4,0,0.2,1) ${idx * 0.12}s`,
+                      }}
+                    >
+                      <span className="absolute -top-5 left-1/2 -translate-x-1/2 text-[10px] font-semibold text-gray-500 whitespace-nowrap">
+                        {baseline[idx].toFixed(1)}
+                      </span>
+                    </div>
+                    {/* KAM bar */}
+                    <div
+                      className="w-full max-w-[28px] rounded-t-md bg-emerald-500 relative"
+                      style={{
+                        height: visible ? `${kamHeight}%` : '0%',
+                        transition: `height 1s cubic-bezier(0.4,0,0.2,1) ${idx * 0.12 + 0.1}s`,
+                      }}
+                    >
+                      <span className="absolute -top-5 left-1/2 -translate-x-1/2 text-[10px] font-semibold text-emerald-700 whitespace-nowrap">
+                        {withKAM[idx].toFixed(1)}
+                      </span>
+                    </div>
+                  </div>
+                  {/* Year label */}
+                  <span className="text-sm font-bold text-gray-700 mt-2">{year}</span>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Cumulative savings row */}
+          <div className="mt-8 rounded-xl bg-emerald-50 border border-emerald-200 p-4">
+            <p className="text-sm font-semibold text-emerald-800 mb-3">Cumulatieve besparing t.o.v. scenario zonder KAM</p>
+            <div className="grid grid-cols-5 gap-2">
+              {savingsData.years.map((year, idx) => (
+                <div key={year} className="text-center">
+                  <div
+                    className="rounded-lg bg-emerald-100 p-2"
+                    style={{
+                      opacity: visible ? 1 : 0,
+                      transform: visible ? 'translateY(0)' : 'translateY(10px)',
+                      transition: `opacity 0.5s ease ${0.8 + idx * 0.1}s, transform 0.5s ease ${0.8 + idx * 0.1}s`,
+                    }}
+                  >
+                    <p className="text-lg sm:text-xl font-extrabold text-emerald-700">
+                      &euro;{cumulative[idx].toFixed(1)}M
+                    </p>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">{year}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Disclaimer */}
+          <p className="mt-4 text-xs text-gray-400 leading-relaxed">
+            * Projectiecijfers zijn indicatief en gebaseerd op het besparingspotentieel van 15-20% bij volledige
+            implementatie van de KAM-initiatieven, opbouwend over ~3 jaar. Werkelijke resultaten zijn afhankelijk van
+            adoptiegraad, contractering en externe factoren.
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  MAIN PAGE                                                          */
+/* ------------------------------------------------------------------ */
+
 export default function HomePage() {
   return (
     <>
@@ -195,6 +616,83 @@ export default function HomePage() {
                 <p className="mt-1 text-xs text-primary-200">{stat.label}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ============ WAT BETEKENT DIT VOOR JOU? ============ */}
+      <section id="voor-jou" className="scroll-mt-20 bg-surface-50 py-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl font-bold text-foreground sm:text-3xl">Wat betekent dit voor jou?</h2>
+            <p className="mt-2 text-gray-500">Ontdek wat dit platform voor jouw rol kan betekenen</p>
+          </div>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {/* Zorgprofessional */}
+            <div className="group rounded-2xl border border-surface-200 bg-white p-6 shadow-sm hover:shadow-lg hover:border-primary-300 transition-all hover:-translate-y-1">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-100 text-primary-700">
+                <Stethoscope className="h-6 w-6" />
+              </div>
+              <h3 className="mt-4 text-lg font-semibold text-foreground">Zorgprofessional</h3>
+              <p className="mt-2 text-sm text-gray-500 leading-relaxed">
+                Ontdek initiatieven die werken en sluit je aan bij collega&apos;s in jouw regio.
+              </p>
+              <div className="mt-4 flex flex-col gap-2">
+                <Link href="/initiatieven" className="inline-flex items-center gap-1 text-sm font-medium text-primary-600 hover:text-primary-700">
+                  Initiatieven <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+                <Link href="/community" className="inline-flex items-center gap-1 text-sm font-medium text-primary-600 hover:text-primary-700">
+                  Community <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+              </div>
+            </div>
+
+            {/* Zorgbestuurder (Kopgroeplid) */}
+            <div className="group rounded-2xl border border-surface-200 bg-white p-6 shadow-sm hover:shadow-lg hover:border-primary-300 transition-all hover:-translate-y-1">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-100 text-primary-700">
+                <Award className="h-6 w-6" />
+              </div>
+              <h3 className="mt-4 text-lg font-semibold text-foreground">Zorgbestuurder (Kopgroeplid)</h3>
+              <p className="mt-2 text-sm text-gray-500 leading-relaxed">
+                Versterk jullie aanpak met tools, data en inzichten uit de kopgroep.
+              </p>
+              <Link href="/dashboard" className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-primary-600 hover:text-primary-700">
+                Bekijk wat dit voor jou betekent <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </div>
+
+            {/* Zorgbestuurder (nog geen Kopgroeplid) */}
+            <div className="group rounded-2xl border border-surface-200 bg-white p-6 shadow-sm hover:shadow-lg hover:border-primary-300 transition-all hover:-translate-y-1">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-100 text-primary-700">
+                <Building2 className="h-6 w-6" />
+              </div>
+              <h3 className="mt-4 text-lg font-semibold text-foreground">Zorgbestuurder (nog geen Kopgroeplid)</h3>
+              <p className="mt-2 text-sm text-gray-500 leading-relaxed">
+                Ontdek wat aansluiting jouw organisatie kan opleveren.
+              </p>
+              <Link href="/kwaliteit-als-medicijn" className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-primary-600 hover:text-primary-700">
+                Bekijk wat dit voor jou betekent <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </div>
+
+            {/* Wethouder */}
+            <div className="group rounded-2xl border border-surface-200 bg-white p-6 shadow-sm hover:shadow-lg hover:border-primary-300 transition-all hover:-translate-y-1">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-100 text-primary-700">
+                <Landmark className="h-6 w-6" />
+              </div>
+              <h3 className="mt-4 text-lg font-semibold text-foreground">Wethouder</h3>
+              <p className="mt-2 text-sm text-gray-500 leading-relaxed">
+                Zie wat deze transformatie betekent voor de jongeren in jouw gemeente.
+              </p>
+              <div className="mt-4 flex flex-col gap-2">
+                <Link href="/gemeentekaart" className="inline-flex items-center gap-1 text-sm font-medium text-primary-600 hover:text-primary-700">
+                  Gemeentekaart <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+                <Link href="/dashboard" className="inline-flex items-center gap-1 text-sm font-medium text-primary-600 hover:text-primary-700">
+                  Dashboard <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -537,6 +1035,46 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ============ VOETNOTEN ============ */}
+      <section className="bg-gray-50 py-10 border-t border-gray-200">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex items-start gap-3 mb-6">
+            <Info className="mt-1 h-5 w-5 shrink-0 text-gray-400" />
+            <h3 className="text-sm font-semibold text-gray-600 uppercase tracking-wider">Toelichting bij besparingscijfers</h3>
+          </div>
+          <div className="space-y-4 max-w-4xl">
+            <div className="flex items-start gap-3">
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gray-200 text-xs font-bold text-gray-600">1</span>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                De doelgroepen en impactdrijvers voor de verschillende interventies overlappen, waardoor de individuele
+                besparingen niet optelbaar zijn. De totale besparing is ontdubbeld: jeugdigen die afzien van B/SGGZ in
+                een eerder stadium worden niet meegenomen in de volgende interventie en behandelduurverkorting wordt
+                eenmaal toegepast.
+              </p>
+            </div>
+            <div className="flex items-start gap-3">
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gray-200 text-xs font-bold text-gray-600">2</span>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                In het besparingspotentieel zijn de meerkosten van elke aanpak al verdisconteerd. Dit betreft
+                netto besparingspotentieel.
+              </p>
+            </div>
+            <div className="mt-4 rounded-xl bg-amber-50 border border-amber-200 p-4">
+              <p className="text-sm text-amber-800 leading-relaxed">
+                <strong>N.B.:</strong> Afwachtende input van Mentaal Beter n.a.v. het gesprek is deze zorgaanbieder
+                niet weergegeven in bovenstaand overzicht.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============ HET CLIENTPAD ============ */}
+      <ClientJourneySection />
+
+      {/* ============ CUMULATIEF BESPARINGSPOTENTIEEL ============ */}
+      <CumulativeSavingsSection />
 
       {/* ============ SUCCESVERHAAL VEENDAM ============ */}
       <section id="succesverhaal" className="scroll-mt-20 bg-gradient-to-br from-green-50 to-emerald-50 py-16">
