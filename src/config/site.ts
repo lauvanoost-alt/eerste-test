@@ -34,6 +34,7 @@ export const siteConfig = {
       label: 'Kennisbank',
       items: [
         { label: 'Kennisbank', href: '/kennisbank', description: 'Artikelen, instrumenten en frameworks' },
+        { label: 'Bronnenwijzer', href: '/bronnen', description: 'Wet- en regelgeving, onderzoek en richtlijnen' },
         { label: 'Blog', href: '/blog', description: 'Verhalen en updates uit het veld' },
         { label: 'Quiz', href: '/quiz', description: 'Test je kennis over passende jeugdzorg' },
       ],
@@ -55,6 +56,7 @@ export const siteConfig = {
     { label: 'Gemeentekaart', href: '/gemeentekaart' },
     { label: 'Organisaties', href: '/organisaties' },
     { label: 'Kennisbank', href: '/kennisbank' },
+    { label: 'Bronnenwijzer', href: '/bronnen' },
     { label: 'Blog', href: '/blog' },
     { label: 'Quiz', href: '/quiz' },
     { label: 'Community', href: '/community' },
