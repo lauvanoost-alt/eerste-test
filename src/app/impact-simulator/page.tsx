@@ -489,7 +489,7 @@ export default function ImpactSimulatorPage() {
 </div>
 
 <div class="footer">
-  <p>Dit document is gegenereerd door de Kwaliteit als Medicijn Impact Simulator. Alle schattingen zijn indicatief en gebaseerd op regionale gemiddelden en wetenschappelijk onderbouwde aannames. De daadwerkelijke resultaten kunnen afwijken afhankelijk van de specifieke context, implementatiekwaliteit en patiëntenpopulatie.</p>
+  <p>Dit document is gegenereerd door de Kwaliteit als Medicijn Impact Simulator. Alle schattingen zijn indicatief en gebaseerd op regionale gemiddelden en aannames uit het programma. De daadwerkelijke resultaten kunnen afwijken afhankelijk van de specifieke context, implementatiekwaliteit en patiëntenpopulatie.</p>
   <p style="margin-top:8px;">Gecombineerde reductie: 1 - ∏(1 - reductie_i) | Kwaliteit als Medicijn — Zuid-Holland Zuid</p>
 </div>
 </body>
@@ -1136,8 +1136,8 @@ export default function ImpactSimulatorPage() {
             </h3>
             <p className="text-sm text-gray-600 leading-relaxed">
               De getoonde cijfers zijn schattingen op basis van regionale
-              gemiddelden en wetenschappelijk onderbouwde aannames uit het
-              programma Kwaliteit als Medicijn in Zuid-Holland Zuid. De
+              gemiddelden en aannames uit het programma Kwaliteit als Medicijn
+              in Zuid-Holland Zuid. De
               daadwerkelijke resultaten kunnen afwijken afhankelijk van de
               specifieke context, implementatiekwaliteit en
               patiëntenpopulatie van uw organisatie. De gecombineerde
