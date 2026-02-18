@@ -15,6 +15,9 @@ import {
   MapPin,
   Globe,
   Download,
+  Share2,
+  Presentation,
+  UserCheck,
 } from 'lucide-react';
 
 /* ------------------------------------------------------------------ */
@@ -1153,20 +1156,72 @@ export default function ImpactSimulatorPage() {
           </div>
         </div>
 
-        {/* Download businesscase button */}
+        {/* Download businesscase section */}
         {results && (
-          <div className="mt-8 text-center">
-            <button
-              type="button"
-              onClick={downloadBusinesscase}
-              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-8 py-4 text-base font-bold text-white shadow-lg hover:from-indigo-700 hover:to-purple-700 transition-all hover:shadow-xl hover:-translate-y-0.5"
-            >
-              <Download size={20} />
-              Download Businesscase als PDF
-            </button>
-            <p className="mt-2 text-xs text-gray-400">
-              Opent een print-vriendelijke pagina die je als PDF kunt opslaan
-            </p>
+          <div className="mt-10 rounded-2xl bg-gradient-to-br from-indigo-50 via-white to-purple-50 border border-indigo-100 shadow-md overflow-hidden">
+            <div className="px-6 py-8 sm:px-10 text-center">
+              <h3 className="text-xl font-bold text-gray-900 mb-2">
+                Jouw businesscase is klaar
+              </h3>
+              <p className="text-sm text-gray-600 max-w-lg mx-auto mb-6">
+                Download de businesscase als PDF en deel deze met je organisatie.
+                Zo maak je de impact van Kwaliteit als Medicijn concreet en bespreekbaar.
+              </p>
+
+              <button
+                type="button"
+                onClick={downloadBusinesscase}
+                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-8 py-4 text-base font-bold text-white shadow-lg hover:from-indigo-700 hover:to-purple-700 transition-all hover:shadow-xl hover:-translate-y-0.5"
+              >
+                <Download size={20} />
+                Download Businesscase als PDF
+              </button>
+              <p className="mt-2 text-xs text-gray-400">
+                Opent een print-vriendelijke pagina die je als PDF kunt opslaan
+              </p>
+            </div>
+
+            <div className="border-t border-indigo-100 bg-white/60 px-6 py-6 sm:px-10">
+              <p className="text-xs font-semibold uppercase tracking-wider text-indigo-500 mb-4 flex items-center gap-1.5">
+                <Share2 size={14} />
+                Wat kun je met deze PDF?
+              </p>
+              <div className="grid gap-4 sm:grid-cols-3">
+                <div className="flex items-start gap-3">
+                  <span className="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-100 text-indigo-600 shrink-0">
+                    <Presentation size={18} />
+                  </span>
+                  <div>
+                    <p className="text-sm font-semibold text-gray-900">Presenteer aan je bestuurder</p>
+                    <p className="text-xs text-gray-500 mt-0.5">
+                      Laat zien welke impact initiatieven hebben op volume, kosten en kwaliteit binnen jouw organisatie.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <span className="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-purple-100 text-purple-600 shrink-0">
+                    <UserCheck size={18} />
+                  </span>
+                  <div>
+                    <p className="text-sm font-semibold text-gray-900">Bespreek met je leidinggevende</p>
+                    <p className="text-xs text-gray-500 mt-0.5">
+                      Gebruik de cijfers als onderbouwing in gesprekken over capaciteit, werkdruk en transformatie.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <span className="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-fuchsia-100 text-fuchsia-600 shrink-0">
+                    <Users size={18} />
+                  </span>
+                  <div>
+                    <p className="text-sm font-semibold text-gray-900">Deel met je team</p>
+                    <p className="text-xs text-gray-500 mt-0.5">
+                      Inspireer collega&apos;s met concrete cijfers en laat zien wat jullie samen kunnen bereiken.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         )}
 
