@@ -39,14 +39,14 @@ interface Provider {
 }
 
 const providers: Provider[] = [
-  { name: 'De Hoop', initiatives: 3, volumeReduction: 17.2, revenueImpact: 12.5, score: 5, trend: 'up' },
-  { name: 'Perspectief', initiatives: 3, volumeReduction: 15.8, revenueImpact: 11.0, score: 5, trend: 'up' },
-  { name: 'Parnassia Groep', initiatives: 2, volumeReduction: 13.4, revenueImpact: 9.2, score: 4, trend: 'up' },
-  { name: 'NeuroScan', initiatives: 2, volumeReduction: 11.6, revenueImpact: 7.8, score: 4, trend: 'stable' },
-  { name: 'Eleos', initiatives: 2, volumeReduction: 9.8, revenueImpact: 6.4, score: 3, trend: 'down' },
-  { name: 'FamilySupporters', initiatives: 1, volumeReduction: 7.2, revenueImpact: 5.1, score: 3, trend: 'up' },
-  { name: 'Mentaal Beter', initiatives: 1, volumeReduction: 5.4, revenueImpact: 3.6, score: 2, trend: 'down' },
-  { name: 'CareHouse', initiatives: 1, volumeReduction: 3.1, revenueImpact: 2.2, score: 2, trend: 'stable' },
+  { name: 'De Hoop', initiatives: 3, volumeReduction: 17.2, revenueImpact: 5.2, score: 5, trend: 'up' },
+  { name: 'Perspectief', initiatives: 3, volumeReduction: 15.8, revenueImpact: 4.6, score: 5, trend: 'up' },
+  { name: 'Parnassia Groep', initiatives: 2, volumeReduction: 13.4, revenueImpact: 3.8, score: 4, trend: 'up' },
+  { name: 'NeuroScan', initiatives: 2, volumeReduction: 11.6, revenueImpact: 3.1, score: 4, trend: 'stable' },
+  { name: 'Eleos', initiatives: 2, volumeReduction: 9.8, revenueImpact: 2.4, score: 3, trend: 'down' },
+  { name: 'FamilySupporters', initiatives: 1, volumeReduction: 7.2, revenueImpact: 1.9, score: 3, trend: 'up' },
+  { name: 'Mentaal Beter', initiatives: 1, volumeReduction: 5.4, revenueImpact: 1.2, score: 2, trend: 'down' },
+  { name: 'CareHouse', initiatives: 1, volumeReduction: 3.1, revenueImpact: 0.7, score: 2, trend: 'stable' },
 ];
 
 /* ------------------------------------------------------------------ */
@@ -179,7 +179,7 @@ export default function DashboardPage() {
 
   // Region totals
   const totalVolumeReduction = providers.reduce((s, p) => s + p.volumeReduction, 0) / providers.length;
-  const totalRevenue = providers.reduce((s, p) => s + p.revenueImpact, 0);
+  const avgRevenueImpact = providers.reduce((s, p) => s + p.revenueImpact, 0) / providers.length;
 
   // Row colour helper
   const rowBg = (rank: number) => {
@@ -253,8 +253,13 @@ export default function DashboardPage() {
               <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full bg-emerald-50 group-hover:bg-emerald-100 transition-colors" />
               <div className="relative">
                 <span className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 mb-3"><DollarSign size={20} /></span>
-                <p className="text-sm text-gray-500 font-medium">Totale Omzetimpact</p>
-                <p className="text-3xl font-extrabold text-gray-900 mt-1">+<AnimatedCounter target={parseFloat(totalRevenue.toFixed(1))} suffix="%" /></p>
+                <p className="text-sm text-gray-500 font-medium flex items-center gap-1">
+                  Gem. Omzeteffect
+                  <Tooltip text="Omzetreductie als gevolg van initiatieven, excl. correctie voor extra instroom door nieuwe verwijzingen">
+                    <Info size={14} className="text-gray-400" />
+                  </Tooltip>
+                </p>
+                <p className="text-3xl font-extrabold text-gray-900 mt-1">&minus;<AnimatedCounter target={parseFloat(avgRevenueImpact.toFixed(1))} suffix="%" /></p>
               </div>
             </div>
 
@@ -300,7 +305,7 @@ export default function DashboardPage() {
               <span>Aanbieder</span>
               <span className="text-center">Initiatieven</span>
               <Tooltip text="Percentage minder verwijzingen / behandelingen"><span className="text-center">Volumereductie</span></Tooltip>
-              <Tooltip text="Verwachte omzetverandering bij volumedaling"><span className="text-center">Omzetimpact</span></Tooltip>
+              <Tooltip text="Omzetreductie als gevolg van initiatieven, excl. correctie voor extra instroom door nieuwe verwijzingen"><span className="text-center flex items-center justify-center gap-1">Omzeteffect <Info size={12} /></span></Tooltip>
               <span className="text-center">Score</span>
               <span className="text-center">Trend</span>
             </div>
@@ -340,8 +345,8 @@ export default function DashboardPage() {
 
                   {/* Revenue */}
                   <div className="text-center">
-                    <span className="font-bold text-emerald-700">+{p.revenueImpact}%</span>
-                    <ProgressBar value={p.revenueImpact} max={15} color="#10b981" />
+                    <span className="font-bold text-amber-700">&minus;{p.revenueImpact}%</span>
+                    <ProgressBar value={p.revenueImpact} max={8} color="#f59e0b" />
                   </div>
 
                   {/* Score */}
@@ -360,37 +365,32 @@ export default function DashboardPage() {
         </section>
 
         {/* ============================================================ */}
-        {/*  SECTION — OMZETBESCHERMING                                  */}
+        {/*  SECTION — FINANCIEEL PERSPECTIEF                              */}
         {/* ============================================================ */}
         <section>
           <div className="flex items-center gap-2 mb-6">
             <Shield size={24} className="text-emerald-600" />
-            <h2 className="text-2xl font-bold text-gray-900">Omzetbescherming voor Aanbieders</h2>
+            <h2 className="text-2xl font-bold text-gray-900">Financieel Perspectief</h2>
           </div>
 
           <div className="rounded-2xl bg-gradient-to-br from-emerald-50 via-white to-teal-50 shadow-md border border-emerald-100 overflow-hidden">
             {/* Header banner */}
             <div className="bg-gradient-to-r from-emerald-600 to-teal-600 px-6 py-4 text-white">
-              <p className="text-sm font-medium text-emerald-100">Wachtlijstbemiddeling &amp; Volumeherverdeling</p>
-              <p className="mt-1 text-lg font-bold">Volumedaling zonder omzetverlies</p>
+              <p className="text-sm font-medium text-emerald-100">Omzeteffect &amp; Volumeherverdeling</p>
+              <p className="mt-1 text-lg font-bold">Hoe lezen we het omzeteffect?</p>
             </div>
 
             <div className="p-6 sm:p-8">
               <div className="rounded-xl bg-amber-50 border border-amber-200 p-4 mb-8 flex items-start gap-3">
                 <Info size={20} className="text-amber-600 shrink-0 mt-0.5" />
                 <p className="text-sm text-amber-800 leading-relaxed">
-                  <strong>Belangrijk:</strong> De volumereductie hierboven gaat over het totaal aantal behandelingen in de regio. In de praktijk
-                  wordt de vrijgekomen capaciteit bij koplopers direct weer opgevuld via wachtlijstbemiddeling en sturing van
-                  verwijzers. Behandelingen duren korter, maar aanbieders kunnen m&eacute;&eacute;r jeugdigen met dezelfde capaciteit helpen.
-                  De omzet per aanbieder blijft daardoor relatief gelijk &mdash; of groeit zelfs.
+                  <strong>Toelichting:</strong> Het omzeteffect in het dashboard toont de omzetreductie als gevolg van
+                  initiatieven, <strong>exclusief</strong> correctie voor extra instroom door nieuwe verwijzingen. In de
+                  praktijk wordt vrijgekomen capaciteit bij koplopers direct weer opgevuld via wachtlijstbemiddeling en
+                  sturing van verwijzers. Het netto-effect op de omzet van aanbieders is daardoor aanzienlijk kleiner
+                  dan het hier getoonde bruto-effect &mdash; en kan zelfs positief uitvallen.
                 </p>
               </div>
-
-              <p className="text-sm text-gray-600 leading-relaxed max-w-3xl mb-8">
-                Aanbieders die vooroplopen in kwaliteitsverbetering mogen daar niet financieel voor gestraft worden.
-                Via wachtlijstbemiddeling en volumeherverdeling wordt ervoor gezorgd dat koplopers hun omzet behouden
-                of zelfs versterken terwijl zij bijdragen aan passendere, kortere en effectievere zorg.
-              </p>
 
               <div className="grid gap-5 sm:grid-cols-2">
                 {/* Card 1 */}
@@ -400,10 +400,10 @@ export default function DashboardPage() {
                       <Handshake size={20} />
                     </span>
                     <div>
-                      <h4 className="font-semibold text-gray-900 text-sm">Wachtlijstbemiddeling &amp; Extra Volume</h4>
+                      <h4 className="font-semibold text-gray-900 text-sm">Wachtlijstbemiddeling &amp; Extra Instroom</h4>
                       <p className="mt-1 text-sm text-gray-500 leading-relaxed">
-                        Door wachtlijstbemiddeling en het toewijzen van extra volume wordt ervoor gezorgd dat de omzet
-                        van aanbieders niet wordt geraakt wanneer trajecten korter worden.
+                        Vrijgekomen capaciteit wordt via wachtlijstbemiddeling en sturing van verwijzers direct benut
+                        voor nieuwe jeugdigen. De netto-omzetimpact is daardoor beperkt.
                       </p>
                     </div>
                   </div>
@@ -416,10 +416,10 @@ export default function DashboardPage() {
                       <Zap size={20} />
                     </span>
                     <div>
-                      <h4 className="font-semibold text-gray-900 text-sm">Geen Negatief Effect op Aanbieders</h4>
+                      <h4 className="font-semibold text-gray-900 text-sm">Meer Jeugdigen, Kortere Trajecten</h4>
                       <p className="mt-1 text-sm text-gray-500 leading-relaxed">
-                        Kortere en effectievere behandelingen hebben geen negatief effect op aanbieders. Wie sneller
-                        en beter werkt, wordt beloond met meer volume, niet minder omzet.
+                        Behandelingen worden korter en effectiever. Aanbieders helpen m&eacute;&eacute;r jeugdigen met
+                        dezelfde capaciteit. Wie sneller en beter werkt, krijgt meer volume.
                       </p>
                     </div>
                   </div>
@@ -434,8 +434,8 @@ export default function DashboardPage() {
                     <div>
                       <h4 className="font-semibold text-gray-900 text-sm">Contractuele Borging</h4>
                       <p className="mt-1 text-sm text-gray-500 leading-relaxed">
-                        Contractueel borgen dat aanbieders die koploper zijn niet worden benadeeld wanneer trajecten
-                        korter en doelmatiger worden. Koplopers krijgen zekerheid.
+                        Koplopers worden contractueel beschermd: wie investeert in kwaliteit wordt niet
+                        benadeeld wanneer trajecten korter en doelmatiger worden.
                       </p>
                     </div>
                   </div>
@@ -448,10 +448,10 @@ export default function DashboardPage() {
                       <ArrowRightLeft size={20} />
                     </span>
                     <div>
-                      <h4 className="font-semibold text-gray-900 text-sm">Aangepaste Toewijzing &amp; Herverdeling</h4>
+                      <h4 className="font-semibold text-gray-900 text-sm">Volumeherverdeling</h4>
                       <p className="mt-1 text-sm text-gray-500 leading-relaxed">
-                        Dit gebeurt via aangepaste toewijzingsafspraken of volumeherverdeling, zodat vrijgekomen
-                        capaciteit direct wordt benut voor wachtende jeugdigen.
+                        Via aangepaste toewijzingsafspraken wordt vrijgekomen capaciteit herverdeeld,
+                        zodat wachtende jeugdigen sneller geholpen worden.
                       </p>
                     </div>
                   </div>
@@ -462,9 +462,10 @@ export default function DashboardPage() {
               <div className="mt-6 rounded-xl bg-emerald-50 border border-emerald-200 p-4 flex items-start gap-3">
                 <Shield size={20} className="text-emerald-600 shrink-0 mt-0.5" />
                 <p className="text-sm text-emerald-800 leading-relaxed">
-                  <strong>Kernprincipe:</strong> Aanbieders die investeren in kwaliteit en efficiency worden beschermd
-                  via volumeherverdeling. Kortere trajecten leiden niet tot minder omzet maar tot meer ruimte voor
-                  wachtende jeugdigen &mdash; een win-win voor aanbieder en regio.
+                  <strong>Kernprincipe:</strong> Het getoonde omzeteffect is een bruto-indicatie. Na correctie voor
+                  extra instroom en volumeherverdeling is het netto-effect voor aanbieders beperkt tot nihil.
+                  Kortere trajecten leiden niet tot minder omzet maar tot meer ruimte voor wachtende
+                  jeugdigen &mdash; een win-win voor aanbieder en regio.
                 </p>
               </div>
             </div>
