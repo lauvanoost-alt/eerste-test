@@ -662,41 +662,56 @@ interface StoryStep {
   icon: typeof AlertTriangle;
   color: string;
   bgGlow: string;
-  quote?: string;
-  quoteAuthor?: string;
   source?: string;
   sourceUrl?: string;
 }
 
-const storySteps: StoryStep[] = [
+const problemSteps: StoryStep[] = [
   {
-    number: '44',
-    label: 'weken wacht een kind gemiddeld op hulp',
-    description: 'Bij 44% van de kinderen gaat het door het wachten slechter. 98% van de hulpverleners ziet lange wachttijden als groot probleem. Kinderen vallen uit op school, vereenzamen en bestaande problemen verergeren.',
-    quote: '\u201cIk weet niet wat er met mij is, ik ben somber en bang. Ik ben op een veilige plek maar ik heb meer hulp nodig, straks gaat het weer mis.\u201d',
-    quoteAuthor: 'Nathalie (12 jaar)',
-    source: 'Stichting Het Vergeten Kind',
-    sourceUrl: 'https://www.hetvergetenkind.nl/nieuws/onderzoek-het-vergeten-kind-kind-in-nood-wacht-gemiddeld-44-weken-op-hulp/',
-    icon: Clock,
+    number: '1 op 7',
+    label: 'kinderen maakt gebruik van jeugdzorg',
+    description: 'In 2020 was dit nog 1 op de 12. De vraag naar jeugdzorg groeit explosief. Dit kan zo niet langer.',
+    icon: Users,
     color: 'from-rose-500 to-red-500',
     bgGlow: 'bg-rose-500',
   },
   {
-    number: '132%',
-    label: 'stijging jeugdzorguitgaven sinds decentralisatie',
-    description: 'In 2023 bedroegen de totale uitgaven \u20AC7,2 miljard (+11% t.o.v. 2022). Voor 2024 is de prognose \u20AC8,1 miljard (+12%). De kosten stijgen structureel harder dan het beschikbare budget.',
-    icon: AlertTriangle,
-    color: 'from-red-500 to-orange-500',
+    number: '44',
+    label: 'weken wacht een kind gemiddeld op hulp',
+    description: 'Bij bijna de helft van de kinderen gaat het door het wachten slechter. 98% van de hulpverleners ziet lange wachttijden als groot probleem. Kinderen vallen uit op school, vereenzamen en bestaande problemen verergeren.',
+    icon: Clock,
+    color: 'from-red-500 to-rose-500',
     bgGlow: 'bg-red-500',
+    source: 'Stichting Het Vergeten Kind',
+    sourceUrl: 'https://www.hetvergetenkind.nl/nieuws/onderzoek-het-vergeten-kind-kind-in-nood-wacht-gemiddeld-44-weken-op-hulp/',
   },
   {
-    number: '\u20AC828 mln',
-    label: 'tekort in 2024 \u2014 de kloof groeit',
-    description: 'Het budget (\u20AC7,2 mrd) groeit niet mee met de uitgaven (\u20AC8,1 mrd). Het tekort groeide van \u20AC628 mln in 2023 naar \u20AC828 mln in 2024. Vrijwel elke gemeente kampt met overschrijdingen.',
-    icon: Building2,
-    color: 'from-orange-500 to-amber-500',
+    number: '132%',
+    label: 'stijging jeugdzorguitgaven in 10 jaar',
+    description: 'In 2024 bedroegen de totale uitgaven ruim \u20AC8 miljard, een stijging van 12% ten opzichte van het jaar daarvoor.',
+    icon: AlertTriangle,
+    color: 'from-orange-500 to-red-500',
     bgGlow: 'bg-orange-500',
   },
+  {
+    number: '90%',
+    label: 'van gemeenten overschrijdt het jeugdzorgbudget',
+    description: 'Het tekort groeide van \u20AC628 mln in 2023 naar \u20AC828 mln in 2024. Het budget (\u20AC7,2 mrd) groeit niet mee met de uitgaven (\u20AC8,1 mrd). De kloof wordt elk jaar groter.',
+    icon: Building2,
+    color: 'from-amber-500 to-orange-500',
+    bgGlow: 'bg-amber-500',
+  },
+  {
+    number: '5.500',
+    label: 'personeelstekort in de jeugdzorg in 2034',
+    description: 'Op een basis van 37.000 werknemers groeit het arbeidsmarkttekort van 1.000 personen in 2024 naar 5.500 in 2034. Er zijn straks simpelweg niet genoeg mensen om het werk te doen.',
+    icon: Users,
+    color: 'from-red-500 to-amber-500',
+    bgGlow: 'bg-red-500',
+  },
+];
+
+const solutionSteps: StoryStep[] = [
   {
     number: '15-20%',
     label: 'volumereductie is haalbaar',
@@ -715,7 +730,7 @@ const storySteps: StoryStep[] = [
   },
 ];
 
-function DataStorySection() {
+function StoryTimeline({ steps, offset = 0 }: { steps: StoryStep[]; offset?: number }) {
   const [visibleSteps, setVisibleSteps] = useState<Set<number>>(new Set());
   const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -739,6 +754,58 @@ function DataStorySection() {
   }, []);
 
   return (
+    <div className="space-y-12">
+      {steps.map((step, idx) => {
+        const isVisible = visibleSteps.has(idx);
+        const StepIcon = step.icon;
+        return (
+          <div
+            key={idx}
+            ref={(el) => { stepRefs.current[idx] = el; }}
+            className="relative flex gap-6 sm:gap-8"
+            style={{
+              opacity: isVisible ? 1 : 0,
+              transform: isVisible ? 'translateX(0)' : 'translateX(-40px)',
+              transition: `opacity 0.8s ease ${(idx + offset) * 0.1}s, transform 0.8s ease ${(idx + offset) * 0.1}s`,
+            }}
+          >
+            {/* Node */}
+            <div className="relative shrink-0">
+              <div className={`w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br ${step.color} flex items-center justify-center shadow-lg`}>
+                <StepIcon className="w-5 h-5 sm:w-7 sm:h-7 text-white" />
+              </div>
+              <div className={`absolute inset-0 ${step.bgGlow} rounded-full blur-xl opacity-30`} />
+            </div>
+
+            {/* Content */}
+            <div className="flex-1 pt-1">
+              <p className={`text-3xl sm:text-5xl font-extrabold bg-gradient-to-r ${step.color} bg-clip-text text-transparent leading-tight`}>
+                {step.number}
+              </p>
+              <p className="mt-1 text-lg sm:text-xl font-semibold text-white/90">{step.label}</p>
+              <p className="mt-2 text-sm sm:text-base text-slate-400 leading-relaxed max-w-lg">{step.description}</p>
+              {step.source && (
+                <p className="mt-2 text-xs text-slate-500">
+                  Bron:{' '}
+                  {step.sourceUrl ? (
+                    <a href={step.sourceUrl} target="_blank" rel="noopener noreferrer" className="underline hover:text-slate-300 transition">
+                      {step.source}
+                    </a>
+                  ) : (
+                    step.source
+                  )}
+                </p>
+              )}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function DataStorySection() {
+  return (
     <section id="het-probleem" className="scroll-mt-28 relative overflow-hidden bg-gradient-to-b from-slate-900 via-slate-800 to-indigo-900 py-20">
       {/* Background decoration */}
       <div className="absolute inset-0 opacity-20">
@@ -746,74 +813,28 @@ function DataStorySection() {
       </div>
 
       <div className="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+        {/* ---- Het probleem ---- */}
         <div className="text-center mb-16">
-          <p className="text-sm font-semibold uppercase tracking-widest text-indigo-400">Waarom dit ertoe doet</p>
+          <p className="text-sm font-semibold uppercase tracking-widest text-red-400">Waarom dit ertoe doet</p>
           <h2 className="mt-3 text-3xl font-bold text-white sm:text-4xl">De jeugdzorg staat onder druk</h2>
         </div>
 
-        {/* Vertical timeline */}
         <div className="relative">
-          {/* Connecting line */}
-          <div className="absolute left-6 sm:left-8 top-0 bottom-0 w-px bg-gradient-to-b from-red-500/50 via-amber-500/50 to-emerald-500/50" />
+          <div className="absolute left-6 sm:left-8 top-0 bottom-0 w-px bg-gradient-to-b from-rose-500/50 via-red-500/50 to-amber-500/50" />
+          <StoryTimeline steps={problemSteps} />
+        </div>
 
-          <div className="space-y-12">
-            {storySteps.map((step, idx) => {
-              const isVisible = visibleSteps.has(idx);
-              const StepIcon = step.icon;
-              return (
-                <div
-                  key={idx}
-                  ref={(el) => { stepRefs.current[idx] = el; }}
-                  className="relative flex gap-6 sm:gap-8"
-                  style={{
-                    opacity: isVisible ? 1 : 0,
-                    transform: isVisible ? 'translateX(0)' : 'translateX(-40px)',
-                    transition: `opacity 0.8s ease ${idx * 0.1}s, transform 0.8s ease ${idx * 0.1}s`,
-                  }}
-                >
-                  {/* Node */}
-                  <div className="relative shrink-0">
-                    <div className={`w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br ${step.color} flex items-center justify-center shadow-lg`}>
-                      <StepIcon className="w-5 h-5 sm:w-7 sm:h-7 text-white" />
-                    </div>
-                    {/* Glow */}
-                    <div className={`absolute inset-0 ${step.bgGlow} rounded-full blur-xl opacity-30`} />
-                  </div>
+        {/* ---- Visuele scheiding ---- */}
+        <div className="my-16 flex items-center gap-4">
+          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-emerald-500/40 to-transparent" />
+          <span className="shrink-0 text-xs font-bold uppercase tracking-widest text-emerald-400">Een oplossingsrichting</span>
+          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-emerald-500/40 to-transparent" />
+        </div>
 
-                  {/* Content */}
-                  <div className="flex-1 pt-1">
-                    <p className={`text-3xl sm:text-5xl font-extrabold bg-gradient-to-r ${step.color} bg-clip-text text-transparent leading-tight`}>
-                      {step.number}
-                    </p>
-                    <p className="mt-1 text-lg sm:text-xl font-semibold text-white/90">{step.label}</p>
-                    <p className="mt-2 text-sm sm:text-base text-slate-400 leading-relaxed max-w-lg">{step.description}</p>
-                    {step.quote && (
-                      <blockquote className="mt-4 border-l-2 border-rose-400/50 pl-4 py-1">
-                        <p className="text-sm sm:text-base italic text-white/80 leading-relaxed">{step.quote}</p>
-                        {step.quoteAuthor && (
-                          <footer className="mt-1.5 text-xs text-slate-400">
-                            &mdash; {step.quoteAuthor}
-                          </footer>
-                        )}
-                      </blockquote>
-                    )}
-                    {step.source && (
-                      <p className="mt-2 text-xs text-slate-500">
-                        Bron:{' '}
-                        {step.sourceUrl ? (
-                          <a href={step.sourceUrl} target="_blank" rel="noopener noreferrer" className="underline hover:text-slate-300 transition">
-                            {step.source}
-                          </a>
-                        ) : (
-                          step.source
-                        )}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+        {/* ---- De oplossing ---- */}
+        <div className="relative">
+          <div className="absolute left-6 sm:left-8 top-0 bottom-0 w-px bg-gradient-to-b from-emerald-500/50 to-primary-500/50" />
+          <StoryTimeline steps={solutionSteps} offset={problemSteps.length} />
         </div>
 
         {/* CTA to scroll down */}
@@ -826,7 +847,7 @@ function DataStorySection() {
               document.getElementById('initiatieven')?.scrollIntoView({ behavior: 'smooth' });
             }}
           >
-            Ontdek onze bijdrage aan een oplossing
+            Ontdek de initiatieven
             <ArrowRight className="h-4 w-4" />
           </a>
         </div>

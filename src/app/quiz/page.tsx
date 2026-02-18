@@ -33,16 +33,16 @@ const questions: Question[] = [
   {
     question:
       'Hoeveel procent van de Nederlandse gemeenten overschrijdt jaarlijks het jeugdzorgbudget?',
-    options: ['50%', '70%', '90%', '30%'],
+    options: ['Ongeveer 60%', 'Ongeveer 75%', 'Ongeveer 90%', 'Ongeveer 45%'],
     correctIndex: 2,
     explanation:
       '90% van de gemeenten overschrijdt jaarlijks het jeugdzorgbudget met gemiddeld 20%. Dit laat zien hoe structureel het financieringsprobleem is.',
   },
   {
     question:
-      'Hoeveel zijn de totale kosten voor jeugdzorg landelijk gestegen tussen 2018-2024?',
-    options: ['+50%', '+80%', '+132%', '+200%'],
-    correctIndex: 2,
+      'Hoeveel zijn de totale kosten voor jeugdzorg landelijk gestegen tussen 2015 en 2024?',
+    options: ['+95%', '+132%', '+165%', '+210%'],
+    correctIndex: 1,
     explanation:
       'De kosten zijn meer dan verdubbeld (+132%), terwijl het aantal jeugdigen minder hard groeide. De kosten per jeugdige zijn dus fors gestegen.',
   },
@@ -50,19 +50,19 @@ const questions: Question[] = [
     question:
       'Wat zijn de kosten per 1.000 inwoners in de duurste gemeente in ZHZ (Alblasserdam) vergeleken met de goedkoopste (Hoeksche Waard)?',
     options: [
+      '\u20AC380k vs \u20AC195k',
+      '\u20AC520k vs \u20AC270k',
       '\u20AC455k vs \u20AC222k',
-      '\u20AC350k vs \u20AC200k',
-      '\u20AC500k vs \u20AC300k',
-      '\u20AC400k vs \u20AC250k',
+      '\u20AC310k vs \u20AC185k',
     ],
-    correctIndex: 0,
+    correctIndex: 2,
     explanation:
       'Het verschil is meer dan factor 2! En ~22% van deze variatie hangt samen met lokale werkwijzen \u2013 niet met bevolkingskenmerken. Er is dus ruimte om te sturen.',
   },
   {
     question:
       'Hoeveel volumereductie behaalde het Bernhoven ziekenhuis met Kwaliteit als Medicijn?',
-    options: ['3%', '7-13%', '20%', '1%'],
+    options: ['3-6%', '7-13%', '15-20%', '10-15%'],
     correctIndex: 1,
     explanation:
       'Bernhoven en Rivas bereikten 7-13% volumereductie binnen 2 jaar. Dit bewijst dat het concept werkt in de curatieve zorg.',
@@ -70,34 +70,34 @@ const questions: Question[] = [
   {
     question:
       'Hoeveel procent van de jongeren ziet na overbruggingszorg (initiatief De Hoop) volledig af van SGGZ?',
-    options: ['5%', '10%', '20%', '40%'],
-    correctIndex: 2,
+    options: ['10%', '20%', '35%', '50%'],
+    correctIndex: 1,
     explanation:
       '20% ziet volledig af van SGGZ en nog eens 40% verschuift naar lichtere BGGZ. Samen betekent dit dat 60% van de jongeren geen specialistische GGZ meer nodig heeft na het overbruggingstraject.',
   },
   {
     question:
       'Hoeveel jeugdhulpaanbieders had Veendam voordat ze reorganiseerden?',
-    options: ['50', '100', '220', '30'],
-    correctIndex: 2,
+    options: ['145', '220', '85', '310'],
+    correctIndex: 1,
     explanation:
       'Veendam ging van 220 aanbieders terug naar 6, gebundeld in het Jeugdexpertise Punt (JEP). Het resultaat: wachtlijsten verdwenen volledig en kosten daalden met 13%.',
   },
   {
     question:
       'Hoeveel arbeidskrachten tekort verwacht de jeugdzorg in 2034?',
-    options: ['1.000', '3.000', '5.500', '10.000'],
-    correctIndex: 2,
+    options: ['Circa 3.200', 'Circa 5.500', 'Circa 8.000', 'Circa 2.100'],
+    correctIndex: 1,
     explanation:
       'Het tekort groeit van 1.000 in 2024 naar 5.500 in 2034. Dit maakt het nog urgenter om met minder personeel betere zorg te leveren \u2013 precies wat Kwaliteit als Medicijn beoogt.',
   },
   {
     question: 'Wat is de kerngedachte achter "Kwaliteit als Medicijn"?',
     options: [
-      'Door kwaliteit te verhogen dalen volumes en kosten vanzelf',
-      'Door kosten te verlagen stijgt de kwaliteit automatisch',
-      'Door meer personeel in te zetten verbetert alles',
-      'Door wachtlijsten weg te werken lost het probleem zich op',
+      'Betere kwaliteit leidt tot minder onnodige zorg en lagere kosten',
+      'Strengere indicatiestelling voorkomt instroom en bespaart budget',
+      'Meer personeel inzetten zorgt voor kortere wachtlijsten en trajecten',
+      'Centralisatie van zorgaanbod leidt tot schaalvoordelen en efficiency',
     ],
     correctIndex: 0,
     explanation:
@@ -106,22 +106,22 @@ const questions: Question[] = [
   {
     question: 'Wat bedoelen we met "normaliseren" binnen het Kwaliteit als Medicijn-gedachtegoed?',
     options: [
-      'Jongeren leren dat hun problemen niet bestaan',
+      'Alle jongeren dezelfde evidence-based standaardbehandeling geven',
+      'De huidige wachtlijsten accepteren als structureel onvermijdelijk',
       'Erkennen dat niet elk probleem een diagnose of behandeling nodig heeft',
-      'Alle jongeren dezelfde standaardbehandeling geven',
-      'De wachtlijsten accepteren als normaal',
+      'Problemen van jongeren terugbrengen naar het gezin en de school',
     ],
-    correctIndex: 1,
+    correctIndex: 2,
     explanation:
       'Normaliseren betekent dat we erkennen dat veel klachten bij het opgroeien horen en niet altijd een GGZ-diagnose of behandeling vereisen. Door te de-medicaliseren en te vertrouwen op eigen kracht, het netwerk en laagdrempelige ondersteuning, voorkomen we onnodige instroom in de GGZ.',
   },
   {
     question: 'Waarom is de samenwerking tussen aanbieders, gemeenten en de inkoper (SoJ) zo cruciaal in het Kwaliteit als Medicijn-model?',
     options: [
-      'Omdat de wet dat verplicht',
-      'Omdat geen enkele partij alleen de transformatie kan realiseren \u2014 het vereist gelijktijdige actie op meerdere niveaus',
-      'Omdat het budget anders niet wordt uitgegeven',
-      'Omdat de inspectie erop controleert',
+      'Omdat wet- en regelgeving gezamenlijke verantwoording vereist',
+      'Omdat alle partijen tegelijk moeten bewegen om de transformatie te laten slagen',
+      'Omdat het beschikbare budget alleen via gezamenlijke aanbesteding vrijkomt',
+      'Omdat de Jeugdwet gemeenten verplicht om regionaal samen te werken',
     ],
     correctIndex: 1,
     explanation:
